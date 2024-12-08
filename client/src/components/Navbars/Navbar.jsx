@@ -33,7 +33,7 @@ const Navbar = () => {
         </Box>
       </Stack>
 
-      <Stack mt={8} px={4} gap={1}>
+      <Stack mt={12} px={4} gap={1}>
         {navOptns.map((navOptn, index) => (
           <Stack
             key={navOptn.navPath || index}
@@ -44,15 +44,21 @@ const Navbar = () => {
               cursor: "pointer",
               py: 1,
               borderRadius: "12px",
-              px: 3,
+              transition: "ease-in-out 0.3s",
+              px: 2,
               ...(navOptn.navPath === window.location.pathname
                 ? selectedStyle
-                : {}),
+                : {
+                  '&:hover':{
+                  color: "var(--primary-color)",
+                }
+                }),
+                
             }}
             onClick={() => navigate(navOptn.navPath)}
           >
             {navOptn.navIcon}
-            <Typography variant="h6">{navOptn.navName}</Typography>
+            <Typography  variant="h6" fontSize="17px">{navOptn.navName}</Typography>
           </Stack>
         ))}
       </Stack>

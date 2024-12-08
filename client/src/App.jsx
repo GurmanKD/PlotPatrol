@@ -5,6 +5,9 @@ import Protected from "./layouts/Protected";
 import Dashboard from "./layouts/Dashboard";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
+import Test from "./pages/Test/test";
+import Complaint from "./pages/Complaint/Complaint";
+import Complaint2 from "./pages/Complaint/Complaint2";
 
 const theme = createTheme({
   palette: {
@@ -34,7 +37,7 @@ function App() {
             ></Route>
             
             <Route path="/maps" element={<EarthMap />}></Route>
-            <Route path="/test" element={<EarthMap />}></Route>
+            <Route path="/complaint" element={<Protected element={<Dashboard element={<Complaint2 />} />} />}></Route>
           </Routes>
         </BrowserRouter>
       </ThemeProvider>

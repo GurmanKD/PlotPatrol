@@ -7,8 +7,8 @@ const navOptns = [
     navIcon: <HomeIcon />,
   },
   {
-    navName: 'Option 1',
-    navPath: '/t1',
+    navName: 'Complaint',
+    navPath: '/complaint',
     navIcon: <HomeIcon />,
   },
   {
