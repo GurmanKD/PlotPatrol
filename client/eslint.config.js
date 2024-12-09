@@ -34,7 +34,7 @@ export default [
         { allowConstantExport: true },
       ],
       // Disable unused variable errors
-      'no-unused-vars': 'off',                     // Disable unused variable checks for JavaScript
+      // 'no-unused-vars': 'off',                     // Disable unused variable checks for JavaScript
       '@typescript-eslint/no-unused-vars': 'off', // Disable for TypeScript if applicable
       // Disable other type-related errors
       'no-undef': 'off',                           // Disable errors for undefined variables

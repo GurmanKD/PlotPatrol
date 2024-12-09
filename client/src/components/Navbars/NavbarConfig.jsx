@@ -12,6 +12,11 @@ const navOptns = [
     navIcon: <HomeIcon />,
   },
   {
+    navName: 'Approve Ct',
+    navPath: '/complaint2',
+    navIcon: <HomeIcon />,
+  },
+  {
     navName: 'Option 2',
     navPath: '/t2',
     navIcon: <HomeIcon />,

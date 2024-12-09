@@ -5,7 +5,7 @@ import Protected from "./layouts/Protected";
 import Dashboard from "./layouts/Dashboard";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
-import Test from "./pages/Test/test";
+// import Test from "./pages/Test/test";
 import Complaint from "./pages/Complaint/Complaint";
 import Complaint2 from "./pages/Complaint/Complaint2";
 
@@ -37,7 +37,8 @@ function App() {
             ></Route>
             
             <Route path="/maps" element={<EarthMap />}></Route>
-            <Route path="/complaint" element={<Protected element={<Dashboard element={<Complaint2 />} />} />}></Route>
+            <Route path="/complaint" element={<Protected element={<Dashboard element={<Complaint />} />} />}></Route>
+            <Route path="/complaint2" element={<Protected element={<Dashboard element={<Complaint2 />} />} />}></Route>
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
