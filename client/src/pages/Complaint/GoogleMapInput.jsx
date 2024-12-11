@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import  { useEffect, useRef, useState } from "react";
 import { Box, Button, TextField } from "@mui/material";
 
 const mapsKey = "AIzaSyAbclwHdrmNLwoUpd-6qTiD8uF6-95gxxc";
@@ -7,7 +7,7 @@ const GoogleMapInput = ({ onChange, onUseCurrentLocation, onPlaceSelected }) => 
   const mapRef = useRef(null);
   const inputRef = useRef(null);
   const [map, setMap] = useState(null);
-  const [autocomplete, setAutocomplete] = useState(null);
+  const [, setAutocomplete] = useState(null);
   const [location, setLocation] = useState("");
   const [isGoogleLoaded, setIsGoogleLoaded] = useState(false);
 

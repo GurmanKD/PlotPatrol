@@ -307,7 +307,7 @@ catch(err){
 
       {/* DWG File */}
 	  <Typography variant="h5" sx={{mt:3,lineHeight:1,mb:0.2}}>
-        DWG File <span style={{color:"var(--error)"}} >*</span> 
+        DWG File <span style={{color:"var(--error)"}} >*</span> 	
       </Typography>
 		{ disputeError.includes('dwg') && (
 			<Typography variant="body1"  color="var(--error)" sx={{mb:0}}>

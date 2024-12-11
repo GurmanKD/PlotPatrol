@@ -26,6 +26,16 @@ const navOptns = [
     navPath: '/builder-form',
     navIcon: <HomeIcon />,
   },
+  {
+    navName: 'Detect Buildings',
+    navPath: '/buildings',
+    navIcon: <HomeIcon />,
+  },
+  {
+    navName: 'Drone Paths',
+    navPath: '/drone-path',
+    navIcon: <HomeIcon />,
+  },
 ];
 
 export default navOptns;

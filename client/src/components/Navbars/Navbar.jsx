@@ -7,7 +7,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   return (
-    <Box width="18%" p={2} sx={{ background: "#F5F5F5" }}>
+    <Box width="20%" p={2} sx={{ background: "#F5F5F5" }}>
       <Stack
         direction="row"
         alignItems="center"
@@ -32,7 +32,7 @@ const Navbar = () => {
         </Box>
       </Stack>
 
-      <Stack mt={12} px={4} gap={1}>
+      <Stack mt={12} px={3} gap={1}>
         {navOptns.map((navOptn, index) => (
           <Stack
             key={navOptn.navPath || index}
