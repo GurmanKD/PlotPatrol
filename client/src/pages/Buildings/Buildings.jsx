@@ -325,7 +325,6 @@ const MapAreaLock = () => {
           </Button>
           <Button
             variant="outlined"
-            color="secondary"
             onClick={clearMarkers}
             startIcon={<Delete />}
             disabled={loading}

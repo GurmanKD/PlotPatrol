@@ -31,9 +31,14 @@ const navOptns = [
     navPath: '/buildings',
     navIcon: <HomeIcon />,
   },
+  // {
+  //   navName: 'Drone Paths',
+  //   navPath: '/drone-path',
+  //   navIcon: <HomeIcon />,
+  // },
   {
-    navName: 'Drone Paths',
-    navPath: '/drone-path',
+    navName: 'Surveys',
+    navPath: '/survey',
     navIcon: <HomeIcon />,
   },
 ];

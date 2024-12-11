@@ -4,9 +4,10 @@
 	--primary-color: #4169E1;
 	--secondary-color: #979797;
 	--secondary-dark-color: #6d6d6d;
-	--error:#c3122f;
+	--error-home:#ff5100;
+	--error:#ff002b;
 	--success:#4cbb17;
-	--intermediate:#ff8a1b;
+	--intermediate:#ff951b;
 }  
 
 

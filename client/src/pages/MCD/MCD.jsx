@@ -1,4 +1,3 @@
-import React from "react";
 import "./Dashboard.css"; // Import the styles as a separate CSS file
 
 const MCD = () => {

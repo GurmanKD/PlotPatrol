@@ -13,28 +13,28 @@ import CloseIcon from "@mui/icons-material/Close";
 import { getPlacesInPincode } from "./PinCodePlaces";
 import axios from "axios";
 import config from "../../config";
+import { useParams } from "react-router-dom";
 
 const DronePath = () => {
+  const params=useParams();
+  const pincode=params.id;
   const [mode, setMode] = useState(1);
   // 1--> Buildings (Registered by builders)
   // 2--> Complaints
   // 3--> Places
 
-  const [data,setData] = useState({
+  const [data, setData] = useState({
     1: [],
     2: [],
     3: [],
   });
-  const pincode="110019";
-
 
   const [nodeList, setNodeList] = useState([]);
 
-
-  const apiKey="AIzaSyAbclwHdrmNLwoUpd-6qTiD8uF6-95gxxc"
+  const apiKey = "AIzaSyAbclwHdrmNLwoUpd-6qTiD8uF6-95gxxc";
 
   const loadGoogleMapsAPI = () => {
-    return new Promise<void>((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       if (typeof google !== "undefined") {
         resolve(); // Already loaded
         return;
@@ -52,111 +52,102 @@ const DronePath = () => {
     });
   };
 
+  const fetchPlaces = async () => {
+    try {
+      await loadGoogleMapsAPI();
+      const res = await getPlacesInPincode(pincode, apiKey);
+      const uniquePlaces = res.filter(
+        (item) => !nodeList.some((node) => node.name === item.name)
+      );
 
-  const fetchPlaces=async()=>{
-	  try {
-      await loadGoogleMapsAPI(); 
-		  const res = await getPlacesInPincode(pincode, apiKey);
-		  const uniquePlaces = res.filter(
-			(item) => !nodeList.some((node) => node.name === item.name)
-		  );
-	  
-		  const shuffledPlaces = uniquePlaces.sort(() => Math.random() - 0.5);
-	  
-		  const randomPlaces = shuffledPlaces.slice(0, 20);
-	  
-		  const transformedPlaces = randomPlaces.map((place) => ({
-			...place,
-			latitude: place.lat,
-			longitude: place.lng,
-		  }));
-	
-		  setData((prevData) => ({
-			...prevData,
-			3: transformedPlaces,
-		  }));
-		} catch (error) {
-			console.error(error);
-		}
-	}
+      const shuffledPlaces = uniquePlaces.sort(() => Math.random() - 0.5);
 
-	const fetchInitialData=async()=>{
-		try {
-			const res=await axios.post(config.api.baseUrl+"/inspection/fetch-building-complaints/",{
-				"area_pincode": pincode,
-				"inspection_id": '3P3TORMAUO8O'
-				});
+      const randomPlaces = shuffledPlaces.slice(0, 20);
 
-			if(res.status===200){
-				const data=res.data;
-				setData((prevData) => ({
-					...prevData,
-					1:data[1],
-					2:data[2],
-				  }));
-				  console.log(data[3]);
-				setNodeList(data[3]);
-			}
+      const transformedPlaces = randomPlaces.map((place) => ({
+        ...place,
+        latitude: place.lat,
+        longitude: place.lng,
+      }));
 
-		} catch (error) {
-			  console.error(error);
-		  }
-	}
+      setData((prevData) => ({
+        ...prevData,
+        3: transformedPlaces,
+      }));
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
+  const fetchInitialData = async () => {
+    try {
+      const res = await axios.post(config.api.baseUrl + "/inspection/fetch-building-complaints/", {
+        "area_pincode": pincode,
+        "inspection_id": '3P3TORMAUO8O'
+      });
 
-  useEffect(()=>{
-	  fetchInitialData();			
-	  fetchPlaces();
-  },[])
+      if (res.status === 200) {
+        const data = res.data;
+        setData((prevData) => ({
+          ...prevData,
+          1: data[1],
+          2: data[2],
+        }));
+        console.log(data[3]);
+        setNodeList(data[3]);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchInitialData();
+    fetchPlaces();
+  }, []);
 
   const handleRemove = (index) => {
     setNodeList(nodeList.filter((_, i) => i !== index));
   };
 
+  const handleAddNode = async (data) => {
+    try {
+      const res = await axios.post(config.api.baseUrl + "/inspection/add-node/", {
+        data: data,
+        "area_pincode": pincode,
+        "inspection_id": '3P3TORMAUO8O'
+      });
 
-  const handleAddNode = async(data) => {
-	try {
-		const res=await axios.post(config.api.baseUrl+"/inspection/add-node/",{
-			data:data,
-			"area_pincode": pincode,
-			"inspection_id": '3P3TORMAUO8O'
-			});
+      if (res.status === 200) {
+        fetchInitialData();
+        fetchPlaces();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-		if(res.status===200){
-			fetchInitialData();
-			fetchPlaces();
-		}
+  const handleDeleteNode = async (id) => {
+    try {
+      const res = await axios.post(config.api.baseUrl + "/inspection/remove-node/", {
+        node_id: id,
+        inspection_id: '3P3TORMAUO8O'
+      });
 
-	} catch (error) {
-		  console.error(error);
-	  }
-  }
-
-  const handleDeleteNode = async(id) => {
-	try {
-		const res=await axios.post(config.api.baseUrl+"/inspection/remove-node/",{
-			node_id:id,
-			inspection_id: '3P3TORMAUO8O'
-			});
-
-		if(res.status===200){
-			fetchInitialData();
-			fetchPlaces();
-		}
-
-	} catch (error) {
-		  console.error(error);
-	  }
-  }
-
-
+      if (res.status === 200) {
+        fetchInitialData();
+        fetchPlaces();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <Box p={2}>
-				   
-<Typography variant="h3" sx={{ fontWeight: 600, mb: 2 }} color='primary'>
-      Drone Paths Survey <span style={{color:"black",fontWeight:500,fontSize:"24px"}}> - {pincode}</span>
-    </Typography>
+      <Typography variant="h3" sx={{ fontWeight: 600, mb: 2 }} color="primary">
+        Drone Paths Survey <span style={{ color: "black", fontWeight: 500, fontSize: "24px" }}> - {pincode}</span>
+      </Typography>
       <Box
         sx={{
           display: "flex",
@@ -165,10 +156,6 @@ const DronePath = () => {
           height: "35vh",
         }}
       >
-
-
-    
-
         {/* Left Section - Video Stream */}
         <Paper
           elevation={3}
@@ -212,11 +199,7 @@ const DronePath = () => {
 
       <Stack direction="row" gap={4} alignItems="stretch" mt={5}>
         <Paper elevation={6} sx={{ p: 2, width: 1, background: "#f5f5f5" }}>
-          <Stack
-            direction="row"
-            alignItems="center"
-            justifyContent="space-between"
-          >
+          <Stack direction="row" alignItems="center" justifyContent="space-between">
             <Stack direction="row" alignItems="flex-end">
               <Button
                 sx={{
@@ -309,7 +292,7 @@ const DronePath = () => {
                     color="primary"
                     size="small"
                     sx={{ border: "2px solid" }}
-                    onClick={() => {handleAddNode(item)}}
+                    onClick={() => { handleAddNode(item) }}
                   >
                     <Add fontSize="inherit" />
                   </IconButton>
@@ -324,51 +307,50 @@ const DronePath = () => {
             Nodes in Drone Path
           </Typography>
 
-          <Stack direction="row" sx={{ border:"2px solid var(--primary-color)" ,p:1,mt:2}}>
-          <Stack direction="row" sx={{ flexWrap: "wrap",height:"38vh",overflowY
-:"auto",alignItems:"stretch"
-		  }}>
-            {nodeList.map((node, index) => (
-              <Box
-                key={index}
-                sx={{
-                  position: "relative",
-                  border: "1px solid #ccc",
-                  borderRadius: "8px",
-                  padding: 2,
-                  minWidth: 200,
-                  maxWidth: 300,
-				  maxHeight: "26vh",
-                  backgroundColor: "#f9f9f9",
-				  m:1.5
-                }}
-              >
-                <IconButton
-                  size="small"
-                  onClick={() => handleDeleteNode(node.id)}
+          <Stack direction="row" sx={{ border: "2px solid var(--primary-color)", p: 1, mt: 2 }}>
+            <Stack direction="row" sx={{ flexWrap: "wrap", height: "38vh", overflowY: "auto", alignItems: "stretch",justifyContent:"space-evenly" }}>
+              {nodeList.map((node, index) => (
+                <Box
+                  key={index}
                   sx={{
-                    position: "absolute",
-                    top: 1,
-                    right: 1,
+                    position: "relative",
+                    border: "1px solid #ccc",
+                    borderRadius: "8px",
+                    padding: 2,
+                    minWidth: 200,
+                    maxWidth: 300,
+                    
+                    maxHeight: "26vh",
+                    backgroundColor: "#f9f9f9",
+                    m: 1.5
                   }}
                 >
-                  <CloseIcon fontSize="small" />
-                </IconButton>
-                <Typography variant="h6" lineHeight={1.3} mb={1} mt={1} gutterBottom>
-                  {node.name}
-                </Typography>
-                <Typography color="var(--primary-color)" fontWeight={600} variant="body2">
-				{`${node?.lat?.toFixed(6)}, ${node?.lng?.toFixed(6)}`}
-                </Typography>
+                  <IconButton
+                    size="small"
+                    onClick={() => handleDeleteNode(node.id)}
+                    sx={{
+                      position: "absolute",
+                      top: 1,
+                      right: 1,
+                    }}
+                  >
+                    <CloseIcon fontSize="small" />
+                  </IconButton>
+                  <Typography variant="h6" lineHeight={1.3} mb={1} mt={1} gutterBottom>
+                    {node.name}
+                  </Typography>
+                  <Typography color="var(--primary-color)" fontWeight={600} variant="body2">
+                    {`${node?.lat?.toFixed(6)}, ${node?.lng?.toFixed(6)}`}
+                  </Typography>
 
-				<Box sx={{border:"2px solid var(--primary-color)",borderRadius:4,width:"fit-content",px:2,mt:1}}>
-                <Typography textAlign="center" fontWeight={600} variant="body2">
-                	{node.type}
-                </Typography>
-				</Box>
-              </Box>
-            ))}
-          </Stack>
+                  <Box sx={{ border: "2px solid var(--primary-color)", borderRadius: 4, width: "fit-content", px: 2, mt: 1 }}>
+                    <Typography textAlign="center" fontWeight={600} variant="body2">
+                      {node.type}
+                    </Typography>
+                  </Box>
+                </Box>
+              ))}
+            </Stack>
           </Stack>
         </Paper>
       </Stack>

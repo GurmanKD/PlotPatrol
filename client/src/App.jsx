@@ -14,6 +14,7 @@ import Buildings from "./pages/Buildings/Buildings";
 import DronePath from "./pages/DronePath/DronePath";
 import MCD from "./pages/MCD/MCD";
 import Schedule from "./pages/Schedule/Schedule";
+import Surveys from "./pages/Surveys/Surveys";
 
 
 const theme = createTheme({
@@ -25,7 +26,7 @@ const theme = createTheme({
       main: "#979797",
     },
     error: {
-      main: "#c3122f", 
+      main: "#ff002b", 
     },
     success:{
       main:"#4cbb17",
@@ -96,7 +97,8 @@ function App() {
             <Route path="/compare" element={<Protected element={<Dashboard element={<Compare />} />} />}></Route>
             <Route path="/builder-form" element={<Protected element={<Dashboard element={<BuilderForm />} />} />}></Route>
             <Route path="/buildings" element={<Protected element={<Dashboard element={<Buildings />} />} />}></Route>
-            <Route path="/drone-path" element={<Protected element={<Dashboard element={<DronePath />} />} />}></Route>
+            <Route path="/drone-path/:id" element={<Protected element={<Dashboard element={<DronePath />} />} />}></Route>
+            <Route path="/survey" element={<Protected element={<Dashboard element={<Surveys />} />} />}></Route>
             <Route path="/test" element={<Protected element={<Dashboard element={<GoogleMapInput />} />} />}></Route>
           </Routes>
         </BrowserRouter>

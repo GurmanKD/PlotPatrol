@@ -186,7 +186,7 @@ const Home = () => {
                 sx={{
                   width: 1,
                   background:
-                    status === 1 ? "var(--error)" : status === 2 ? "var(--intermediate)" : "var(--success)",
+                    status === 1 ? "var(--error-home)" : status === 2 ? "var(--intermediate)" : "var(--success)",
 
                   borderRadius: 2,
                   px: 2,
@@ -335,7 +335,7 @@ const Home = () => {
               py: 1,
               mb: 2,
               background:
-                status === 1 ? "var(--error)" : status === 2 ? "var(--intermediate)" : "var(--success)",
+                status === 1 ? "var(--error-home)" : status === 2 ? "var(--intermediate)" : "var(--success)",
             }}
           >
             <Typography textAlign="center" color="white" variant="h6">
