@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -10,6 +10,9 @@ import {
 import PincodeMap from "./PincodeMap";
 import { Add } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
+import { getPlacesInPincode } from "./PinCodePlaces";
+import axios from "axios";
+import config from "../../config";
 
 const DronePath = () => {
   const [mode, setMode] = useState(1);
@@ -17,189 +20,137 @@ const DronePath = () => {
   // 2--> Complaints
   // 3--> Places
 
-  const data = {
-    1: [
-      {
-        name: "Greenfield High School",
-        builder: "Ravi Mehta",
-        complaint_category: "Noise Complaint",
-        lat: 28.5355,
-        lng: 77.391,
-        type: "School",
-      },
-      {
-        name: "Sunshine Academy",
-        builder: "Neha Sharma",
-        complaint_category: "",
-        lat: 28.7041,
-        lng: 77.1025,
-        type: "School",
-      },
-      {
-        name: "Harmony Public School",
-        builder: "Ansh Sehrawat",
-        complaint_category: "Pavement Issue",
-        lat: 19.076,
-        lng: 72.8777,
-        type: "School",
-      },
-      {
-        name: "Little Star School",
-        builder: "Arjun Kapoor",
-        complaint_category: "",
-        lat: 12.9716,
-        lng: 77.5946,
-        type: "School",
-      },
-      {
-        name: "Rainbow Kids School",
-        builder: "Ravi Mehta",
-        complaint_category: "Waterlogging",
-        lat: 22.5726,
-        lng: 88.3639,
-        type: "School",
-      },
-    ],
-    2: [
-      {
-        name: "Sunnyvale Residency",
-        builder: "Neha Sharma",
-        complaint_category: "Extended Pavement",
-        lat: 19.076,
-        lng: 72.8777,
-        type: "Residential",
-      },
-      {
-        name: "Blue Ridge Apartments",
-        builder: "",
-        complaint_category: "Extra Floor",
-        lat: 28.5355,
-        lng: 77.391,
-        type: "Residential",
-      },
-      {
-        name: "Maple Grove Apartments",
-        builder: "Arjun Kapoor",
-        complaint_category: "Inside Parking",
-        lat: 12.9716,
-        lng: 77.5946,
-        type: "Residential",
-      },
-      {
-        name: "Green Valley Residency",
-        builder: "Ravi Mehta",
-        complaint_category: "Encroachment on Public Property",
-        lat: 28.7041,
-        lng: 77.1025,
-        type: "Residential",
-      },
-      {
-        name: "Hilltop Residency",
-        builder: "Neha Sharma",
-        complaint_category: "Extended Balcony",
-        lat: 22.5726,
-        lng: 88.3639,
-        type: "Residential",
-      },
-    ],
-    3: [
-      {
-        name: "Harmony Business Park",
-        builder: "Arjun Kapoor",
-        complaint_category: "",
-        lat: 12.9716,
-        lng: 77.5946,
-        type: "Commercial",
-      },
-      {
-        name: "Blue Horizon Offices",
-        builder: "Ravi Mehta",
-        complaint_category: "Noise Complaint",
-        lat: 28.5355,
-        lng: 77.391,
-        type: "Commercial",
-      },
-      {
-        name: "Green Public School",
-        builder: "",
-        complaint_category: "",
-        lat: 28.7041,
-        lng: 77.1025,
-        type: "School",
-      },
-      {
-        name: "tata Steels & Co.",
-        builder: "Neha Sharma",
-        complaint_category: "Pavement Issue",
-        lat: 19.076,
-        lng: 72.8777,
-        type: "Industry",
-      },
-      {
-        name: "Emerald Business Hub",
-        builder: "Arjun Kapoor",
-        complaint_category: "Power Outage",
-        lat: 22.5726,
-        lng: 88.3639,
-        type: "Commercial",
-      },
-      {
-        name: "Golden Valley Public School",
-        builder: "",
-        complaint_category: "Waterlogging",
-        lat: 12.9716,
-        lng: 77.5946,
-        type: "School",
-      },
-    ],
+  const [data,setData] = useState({
+    1: [],
+    2: [],
+    3: [],
+  });
+  const pincode="110019";
+
+
+  const [nodeList, setNodeList] = useState([]);
+
+
+  const apiKey="AIzaSyAbclwHdrmNLwoUpd-6qTiD8uF6-95gxxc"
+
+  const loadGoogleMapsAPI = () => {
+    return new Promise<void>((resolve, reject) => {
+      if (typeof google !== "undefined") {
+        resolve(); // Already loaded
+        return;
+      }
+
+      const script = document.createElement("script");
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
+      script.async = true;
+      script.defer = true;
+
+      script.onload = () => resolve();
+      script.onerror = () => reject(new Error("Failed to load Google Maps API"));
+
+      document.head.appendChild(script);
+    });
   };
 
-  const [nodeList, setNodeList] = useState([
-    {
-      name: "Sunnyvale Residency",
-      builder: "Neha Sharma",
-      complaint_category: "Extended Pavement",
-      lat: 19.076,
-      lng: 72.8777,
-      type: "Residential",
-    },
-    {
-      name: "Blue Ridge Apartments",
-      builder: "",
-      complaint_category: "Extra Floor",
-      lat: 28.5355,
-      lng: 77.391,
-      type: "Residential",
-    },
-    {
-      name: "Maple Grove Apartments",
-      builder: "Arjun Kapoor",
-      complaint_category: "Inside Parking",
-      lat: 12.9716,
-      lng: 77.5946,
-      type: "Residential",
-    },
-    {
-      name: "Green Valley Residency",
-      builder: "Ravi Mehta",
-      complaint_category: "Encroachment on Public Property",
-      lat: 28.7041,
-      lng: 77.1025,
-      type: "Residential",
-    },
-    {
-      name: "Hilltop Residency",
-      builder: "Neha Sharma",
-      complaint_category: "Extended Balcony",
-      lat: 22.5726,
-      lng: 88.3639,
-      type: "Residential",
-    },
-  ]);
+
+  const fetchPlaces=async()=>{
+	  try {
+      await loadGoogleMapsAPI(); 
+		  const res = await getPlacesInPincode(pincode, apiKey);
+		  const uniquePlaces = res.filter(
+			(item) => !nodeList.some((node) => node.name === item.name)
+		  );
+	  
+		  const shuffledPlaces = uniquePlaces.sort(() => Math.random() - 0.5);
+	  
+		  const randomPlaces = shuffledPlaces.slice(0, 20);
+	  
+		  const transformedPlaces = randomPlaces.map((place) => ({
+			...place,
+			latitude: place.lat,
+			longitude: place.lng,
+		  }));
+	
+		  setData((prevData) => ({
+			...prevData,
+			3: transformedPlaces,
+		  }));
+		} catch (error) {
+			console.error(error);
+		}
+	}
+
+	const fetchInitialData=async()=>{
+		try {
+			const res=await axios.post(config.api.baseUrl+"/inspection/fetch-building-complaints/",{
+				"area_pincode": pincode,
+				"inspection_id": '3P3TORMAUO8O'
+				});
+
+			if(res.status===200){
+				const data=res.data;
+				setData((prevData) => ({
+					...prevData,
+					1:data[1],
+					2:data[2],
+				  }));
+				  console.log(data[3]);
+				setNodeList(data[3]);
+			}
+
+		} catch (error) {
+			  console.error(error);
+		  }
+	}
+
+
+  useEffect(()=>{
+	  fetchInitialData();			
+	  fetchPlaces();
+  },[])
 
   const handleRemove = (index) => {
     setNodeList(nodeList.filter((_, i) => i !== index));
   };
+
+
+  const handleAddNode = async(data) => {
+	try {
+		const res=await axios.post(config.api.baseUrl+"/inspection/add-node/",{
+			data:data,
+			"area_pincode": pincode,
+			"inspection_id": '3P3TORMAUO8O'
+			});
+
+		if(res.status===200){
+			fetchInitialData();
+			fetchPlaces();
+		}
+
+	} catch (error) {
+		  console.error(error);
+	  }
+  }
+
+  const handleDeleteNode = async(data) => {
+	try {
+		const res=await axios.post(config.api.baseUrl+"/inspection/delete-node/",{
+			data:data,
+			"area_pincode": pincode,
+			"inspection_id": '3P3TORMAUO8O'
+			});
+
+		if(res.status===200){
+			fetchInitialData();
+			fetchPlaces();
+		}
+
+	} catch (error) {
+		  console.error(error);
+	  }
+  }
+
+
 
   return (
     <Box>
@@ -354,7 +305,7 @@ const DronePath = () => {
                     color="primary"
                     size="small"
                     sx={{ border: "2px solid" }}
-                    onClick={() => {}}
+                    onClick={() => {handleAddNode(item)}}
                   >
                     <Add fontSize="inherit" />
                   </IconButton>
@@ -389,7 +340,7 @@ const DronePath = () => {
               >
                 <IconButton
                   size="small"
-                  onClick={() => handleRemove(index)}
+                  onClick={() => handleDeleteNode(node)}
                   sx={{
                     position: "absolute",
                     top: 1,
@@ -402,7 +353,7 @@ const DronePath = () => {
                   {node.name}
                 </Typography>
                 <Typography color="var(--primary-color)" fontWeight={600} variant="body2">
-				{`${node.lat.toFixed(6)}, ${node.lng.toFixed(6)}`}
+				{`${node?.lat?.toFixed(6)}, ${node?.lng?.toFixed(6)}`}
                 </Typography>
 
 				<Box sx={{border:"2px solid var(--primary-color)",borderRadius:4,width:"fit-content",px:2,mt:1}}>

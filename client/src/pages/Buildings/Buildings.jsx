@@ -25,7 +25,6 @@ import {
   Delete,
   LocationOn,
   ZoomIn,
-  ContentCopy,
 } from '@mui/icons-material';
 import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
@@ -135,9 +134,6 @@ const MapAreaLock = () => {
     setMiniMapCenter(null);
   };
 
-  const copyCoordinates = (lat, lng) => {
-    navigator.clipboard.writeText(`${lat}, ${lng}`);
-  };
 
   const showPlaceOnMap = (place) => {
     setSelectedPlace(place);
