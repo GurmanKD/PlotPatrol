@@ -18,10 +18,10 @@ const MainNav = () => {
 
 
       <Stack direction="row" alignItems="center" justifyContent="flex-end" gap={2} pr={4}>
-        <Button variant="contained" color="primary"  sx={{ color: "white",px:4, fontSize:"16px" }}>
+        <Button variant="outlined" color="primary"  sx={{ px:4, fontSize:"16px",borderWidth:"2px" }}>
           Settings
         </Button>
-        <Button variant="contained" color="primary" sx={{ color: "white",px:4, fontSize:"16px" }}>
+        <Button variant="outlined" color="primary" sx={{ px:4, fontSize:"16px",borderWidth:"2px" }}>
           Logout
         </Button>
 

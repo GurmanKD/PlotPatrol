@@ -101,7 +101,7 @@ const Home = () => {
   });
 
   return (
-    <Box sx={{ p: 5 }}>
+    <Box sx={{ p: 2 }}>
       <Stack
         direction="row"
         alignItems="flex-end"
@@ -109,7 +109,7 @@ const Home = () => {
         mb={2}
       >
         <Box>
-          <Typography variant="h3" color="primary.main">
+          <Typography variant="h3" sx={{ fontWeight: 600 }} color="primary.main">
             {building}
           </Typography>
           <Typography variant="h6" color="text.secondary" pl={1}>

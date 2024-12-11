@@ -88,7 +88,7 @@ const [finalResult, setFinalResult] = useState("https://i.pinimg.com/736x/a2/a3/
   };
 
   return (
-    <Stack alignItems="center">
+    <Stack alignItems="center" p={2}>
       <Typography variant="h3" sx={{ alignSelf: 'flex-start' }} fontWeight={600} color="var(--primary-color)">
         Compare Maps
       </Typography>

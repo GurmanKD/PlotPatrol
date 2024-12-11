@@ -200,8 +200,8 @@ catch(err){
   };
 
   return (
-    <Box sx={{ p: 3 }}>
-          <Typography variant="h3" color="primary.main" sx={{mb:2}}>
+    <Box sx={{ p: 2 }}>
+          <Typography variant="h3" color="primary.main" sx={{fontWeight:600,mb:2}}>
 		  Builder Form
       </Typography>
 

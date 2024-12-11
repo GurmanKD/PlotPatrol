@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback } from "react";
 import {
   Box,
   Button,
@@ -17,7 +17,7 @@ import {
   IconButton,
   Tooltip,
   Grid,
-} from '@mui/material';
+} from "@mui/material";
 import {
   School,
   LocalHospital,
@@ -25,10 +25,10 @@ import {
   Delete,
   LocationOn,
   ZoomIn,
-} from '@mui/icons-material';
-import DoneIcon from '@mui/icons-material/Done';
-import CloseIcon from '@mui/icons-material/Close';
-import { Wrapper } from '@googlemaps/react-wrapper';
+} from "@mui/icons-material";
+import DoneIcon from "@mui/icons-material/Done";
+import CloseIcon from "@mui/icons-material/Close";
+import { Wrapper } from "@googlemaps/react-wrapper";
 
 const MapComponent = ({ onMapLoad, onClick, center, zoom, marker }) => {
   const ref = React.useRef(null);
@@ -39,11 +39,11 @@ const MapComponent = ({ onMapLoad, onClick, center, zoom, marker }) => {
       const mapInstance = new window.google.maps.Map(ref.current, {
         center: center || { lat: 30.3515154, lng: 76.3624647 },
         zoom: zoom || 17,
-        mapTypeId: 'satellite',
+        mapTypeId: "satellite",
       });
 
       if (onClick) {
-        mapInstance.addListener('click', (event) => {
+        mapInstance.addListener("click", (event) => {
           onClick(event.latLng, mapInstance);
         });
       }
@@ -70,16 +70,16 @@ const MapComponent = ({ onMapLoad, onClick, center, zoom, marker }) => {
         icon: {
           path: window.google.maps.SymbolPath.CIRCLE,
           scale: 10,
-          fillColor: '#ff0000',
+          fillColor: "#ff0000",
           fillOpacity: 1,
-          strokeColor: '#ffffff',
+          strokeColor: "#ffffff",
           strokeWeight: 2,
         },
       });
     }
   }, [map, marker]);
 
-  return <div ref={ref} style={{ width: '100%', height: '100%' }} />;
+  return <div ref={ref} style={{ width: "100%", height: "100%" }} />;
 };
 
 const MapAreaLock = () => {
@@ -89,10 +89,10 @@ const MapAreaLock = () => {
   const [places, setPlaces] = useState({
     schools: [],
     hospitals: [],
-    industries: []
+    industries: [],
   });
-  const [satelliteImage, setSatelliteImage] = useState('');
-  const [error, setError] = useState('');
+  const [satelliteImage, setSatelliteImage] = useState("");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [, setSelectedPlace] = useState(null);
   const [miniMapCenter, setMiniMapCenter] = useState(null);
@@ -101,39 +101,41 @@ const MapAreaLock = () => {
     setMap(mapInstance);
   }, []);
 
-  const addMarker = useCallback((location, mapInstance) => {
-    if (markers.length >= 4) {
-      setError('Maximum 4 points allowed');
-      return;
-    }
-    
-    const marker = new window.google.maps.Marker({
-      position: location,
-      map: mapInstance,
-      icon: {
-        path: window.google.maps.SymbolPath.CIRCLE,
-        scale: 8,
-        fillColor: '#1976d2',
-        fillOpacity: 1,
-        strokeColor: '#ffffff',
-        strokeWeight: 2,
-      },
-    });
-    setMarkers(prev => [...prev, marker]);
-  }, [markers]);
+  const addMarker = useCallback(
+    (location, mapInstance) => {
+      if (markers.length >= 4) {
+        setError("Maximum 4 points allowed");
+        return;
+      }
+
+      const marker = new window.google.maps.Marker({
+        position: location,
+        map: mapInstance,
+        icon: {
+          path: window.google.maps.SymbolPath.CIRCLE,
+          scale: 8,
+          fillColor: "#1976d2",
+          fillOpacity: 1,
+          strokeColor: "#ffffff",
+          strokeWeight: 2,
+        },
+      });
+      setMarkers((prev) => [...prev, marker]);
+    },
+    [markers]
+  );
 
   const clearMarkers = () => {
-    markers.forEach(marker => marker.setMap(null));
+    markers.forEach((marker) => marker.setMap(null));
     if (polygon) polygon.setMap(null);
     setMarkers([]);
     setPolygon(null);
-    setSatelliteImage('');
+    setSatelliteImage("");
     setPlaces({ schools: [], hospitals: [], industries: [] });
-    setError('');
+    setError("");
     setSelectedPlace(null);
     setMiniMapCenter(null);
   };
-
 
   const showPlaceOnMap = (place) => {
     setSelectedPlace(place);
@@ -144,39 +146,43 @@ const MapAreaLock = () => {
     // const ne = bounds.getNorthEast();
     // const sw = bounds.getSouthWest();
     const center = bounds.getCenter();
-    
-    // Create path string for polygon
-    const pathPoints = markers.map(marker => {
-      const pos = marker.getPosition();
-      return `${pos.lat()},${pos.lng()}`;
-    }).join('|');
 
-    return `https://maps.googleapis.com/maps/api/staticmap?` +
-           `center=${center.lat()},${center.lng()}&` +
-           `zoom=18&` +
-           `size=800x600&` +
-           `maptype=satellite&` +
-           `path=color:0x1976d2|weight:3|${pathPoints}&` +
-           `key=AIzaSyAbclwHdrmNLwoUpd-6qTiD8uF6-95gxxc`;
+    // Create path string for polygon
+    const pathPoints = markers
+      .map((marker) => {
+        const pos = marker.getPosition();
+        return `${pos.lat()},${pos.lng()}`;
+      })
+      .join("|");
+
+    return (
+      `https://maps.googleapis.com/maps/api/staticmap?` +
+      `center=${center.lat()},${center.lng()}&` +
+      `zoom=18&` +
+      `size=800x600&` +
+      `maptype=satellite&` +
+      `path=color:0x1976d2|weight:3|${pathPoints}&` +
+      `key=AIzaSyAbclwHdrmNLwoUpd-6qTiD8uF6-95gxxc`
+    );
   };
 
   const lockArea = async () => {
     if (markers.length < 3) {
-      setError('Please add at least 3 markers to create an area');
+      setError("Please add at least 3 markers to create an area");
       return;
     }
-    setError('');
+    setError("");
     setLoading(true);
 
     try {
       if (polygon) polygon.setMap(null);
 
       const newPolygon = new window.google.maps.Polygon({
-        paths: markers.map(marker => marker.getPosition()),
-        strokeColor: '#1976d2',
+        paths: markers.map((marker) => marker.getPosition()),
+        strokeColor: "#1976d2",
         strokeOpacity: 0.8,
         strokeWeight: 2,
-        fillColor: '#1976d2',
+        fillColor: "#1976d2",
         fillOpacity: 0.35,
       });
 
@@ -185,7 +191,7 @@ const MapAreaLock = () => {
 
       // Calculate bounds
       const bounds = new window.google.maps.LatLngBounds();
-      markers.forEach(marker => bounds.extend(marker.getPosition()));
+      markers.forEach((marker) => bounds.extend(marker.getPosition()));
 
       // Get static map image of the area
       const imageUrl = getStaticMapUrl(bounds);
@@ -193,7 +199,7 @@ const MapAreaLock = () => {
 
       await fetchPlaces(bounds);
     } catch (err) {
-      setError('Error locking area: ' + err.message);
+      setError("Error locking area: " + err.message);
     } finally {
       setLoading(false);
     }
@@ -201,23 +207,26 @@ const MapAreaLock = () => {
 
   const fetchPlaces = async (bounds) => {
     const service = new window.google.maps.places.PlacesService(map);
-    const placeTypes = ['school', 'hospital', 'industrial'];
+    const placeTypes = ["school", "hospital", "industrial"];
     const newPlaces = { schools: [], hospitals: [], industries: [] };
 
-    const searchPromises = placeTypes.map(type => {
+    const searchPromises = placeTypes.map((type) => {
       return new Promise((resolve) => {
         service.nearbySearch(
           {
             bounds: bounds,
-            type: type
+            type: type,
           },
           (results, status) => {
-            if (status === window.google.maps.places.PlacesServiceStatus.OK && results) {
-              const category = type + 's';
-              newPlaces[category] = results.map(place => ({
+            if (
+              status === window.google.maps.places.PlacesServiceStatus.OK &&
+              results
+            ) {
+              const category = type + "s";
+              newPlaces[category] = results.map((place) => ({
                 name: place.name,
                 location: place.geometry.location,
-                placeData: place
+                placeData: place,
               }));
             }
             resolve();
@@ -239,39 +248,45 @@ const MapAreaLock = () => {
         {items.map((item, index) => (
           <ListItem key={index}>
             <ListItemIcon>{icon}</ListItemIcon>
-            <ListItemText 
+            <ListItemText
               primary={item.name}
-              secondary={`${item.location.lat().toFixed(6)}, ${item.location.lng().toFixed(6)}`}
+              secondary={`${item.location.lat().toFixed(6)}, ${item.location
+                .lng()
+                .toFixed(6)}`}
             />
-            
+
             <Tooltip title="View on Map">
-              <IconButton 
+              <IconButton
                 onClick={() => showPlaceOnMap(item.placeData)}
-				sx={{ border: "2px solid var(--primary-color)",color:"var(--primary-color)" ,mx:1 }}
+                sx={{
+                  border: "2px solid var(--primary-color)",
+                  color: "var(--primary-color)",
+                  mx: 1,
+                }}
                 size="small"
               >
                 <ZoomIn fontSize="inherit" />
               </IconButton>
             </Tooltip>
             <Tooltip title="Flag">
-			<IconButton
-                    color="success"
-                    size="small"
-                    sx={{ border: "2px solid" ,mx:1 }}
-                    onClick={() => handleApproval(index)}
-                  >
-                    <DoneIcon fontSize="inherit" />
-                  </IconButton>
+              <IconButton
+                color="success"
+                size="small"
+                sx={{ border: "2px solid", mx: 1 }}
+                onClick={() => handleApproval(index)}
+              >
+                <DoneIcon fontSize="inherit" />
+              </IconButton>
             </Tooltip>
             <Tooltip title="Halt">
-			<IconButton
-                    color="error"
-                    size="small"
-                    sx={{ border: "2px solid" ,mx:1 }}
-                    onClick={() => handleDisapproval(index)}
-                  >
-                    <CloseIcon fontSize="inherit" />
-                  </IconButton>
+              <IconButton
+                color="error"
+                size="small"
+                sx={{ border: "2px solid", mx: 1 }}
+                onClick={() => handleDisapproval(index)}
+              >
+                <CloseIcon fontSize="inherit" />
+              </IconButton>
             </Tooltip>
           </ListItem>
         ))}
@@ -285,19 +300,18 @@ const MapAreaLock = () => {
   );
 
   const render = (status) => {
-    if (status === 'LOADING') return <CircularProgress />;
-    if (status === 'FAILURE') return <Alert severity="error">Error loading Google Maps</Alert>;
+    if (status === "LOADING") return <CircularProgress />;
+    if (status === "FAILURE")
+      return <Alert severity="error">Error loading Google Maps</Alert>;
     return null;
   };
 
   return (
-    <Container maxWidth="lg">
-      <Box my={4}>
-	  <Typography variant="h3" color="primary.main" sx={{mb:2}}>
-		Building Detection 
-      </Typography>
+      <Box p={2}>
+        <Typography variant="h3" color="primary.main" sx={{fontWeight:600, mb: 2 }}>
+          Building Detection
+        </Typography>
 
-        
         <Box mb={2}>
           <Button
             variant="contained"
@@ -307,7 +321,7 @@ const MapAreaLock = () => {
             sx={{ mr: 1 }}
             disabled={loading}
           >
-            {loading ? 'Loading...' : 'Lock Area'}
+            {loading ? "Loading..." : "Lock Area"}
           </Button>
           <Button
             variant="outlined"
@@ -327,19 +341,16 @@ const MapAreaLock = () => {
         )}
 
         <Paper elevation={3} sx={{ mb: 4 }}>
-          <Box 
+          <Box
             id="map-container"
-            sx={{ height: 500, width: '100%', borderRadius: 1 }}
+            sx={{ height: 500, width: "100%", borderRadius: 1 }}
           >
             <Wrapper
               apiKey="AIzaSyAbclwHdrmNLwoUpd-6qTiD8uF6-95gxxc"
               render={render}
-              libraries={['places']}
+              libraries={["places"]}
             >
-              <MapComponent
-                onMapLoad={handleMapLoad}
-                onClick={addMarker}
-              />
+              <MapComponent onMapLoad={handleMapLoad} onClick={addMarker} />
             </Wrapper>
           </Box>
         </Paper>
@@ -363,23 +374,26 @@ const MapAreaLock = () => {
         <Grid container spacing={3}>
           {/* Places List */}
           <Grid item xs={12} md={6}>
-            <Paper elevation={3} sx={{ p: 3, height: '600px', overflowY: 'auto' }}>
+            <Paper
+              elevation={3}
+              sx={{ p: 3, height: "600px", overflowY: "auto" }}
+            >
               <Typography variant="h5" gutterBottom>
                 Flagged Commercial Places
               </Typography>
-              
+
               <PlacesList
                 title="Schools"
                 items={places.schools}
                 icon={<School color="primary" />}
               />
-              
+
               <PlacesList
                 title="Hospitals"
                 items={places.hospitals}
                 icon={<LocalHospital color="primary" />}
               />
-              
+
               <PlacesList
                 title="Industries"
                 items={places.industries}
@@ -390,15 +404,15 @@ const MapAreaLock = () => {
 
           {/* Mini Map */}
           <Grid item xs={12} md={6}>
-            <Paper elevation={3} sx={{ p: 3, height: '600px' }}>
+            <Paper elevation={3} sx={{ p: 3, height: "600px" }}>
               <Typography variant="h5" gutterBottom>
                 Location Preview
               </Typography>
-              <Box sx={{ height: 'calc(100% - 40px)' }}>
+              <Box sx={{ height: "calc(100% - 40px)" }}>
                 <Wrapper
                   apiKey="AIzaSyAbclwHdrmNLwoUpd-6qTiD8uF6-95gxxc"
                   render={render}
-                  libraries={['places']}
+                  libraries={["places"]}
                 >
                   <MapComponent
                     onMapLoad={() => {}}
@@ -412,7 +426,6 @@ const MapAreaLock = () => {
           </Grid>
         </Grid>
       </Box>
-    </Container>
   );
 };
 

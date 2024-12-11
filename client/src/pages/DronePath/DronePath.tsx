@@ -132,12 +132,11 @@ const DronePath = () => {
 	  }
   }
 
-  const handleDeleteNode = async(data) => {
+  const handleDeleteNode = async(id) => {
 	try {
-		const res=await axios.post(config.api.baseUrl+"/inspection/delete-node/",{
-			data:data,
-			"area_pincode": pincode,
-			"inspection_id": '3P3TORMAUO8O'
+		const res=await axios.post(config.api.baseUrl+"/inspection/remove-node/",{
+			node_id:id,
+			inspection_id: '3P3TORMAUO8O'
 			});
 
 		if(res.status===200){
@@ -153,7 +152,11 @@ const DronePath = () => {
 
 
   return (
-    <Box>
+    <Box p={2}>
+				   
+<Typography variant="h3" sx={{ fontWeight: 600, mb: 2 }} color='primary'>
+      Drone Paths Survey <span style={{color:"black",fontWeight:500,fontSize:"24px"}}> - {pincode}</span>
+    </Typography>
       <Box
         sx={{
           display: "flex",
@@ -162,6 +165,10 @@ const DronePath = () => {
           height: "35vh",
         }}
       >
+
+
+    
+
         {/* Left Section - Video Stream */}
         <Paper
           elevation={3}
@@ -171,7 +178,7 @@ const DronePath = () => {
             overflow: "hidden",
           }}
         >
-          <Typography variant="h6" sx={{ p: 1 }}>
+          <Typography variant="h5" sx={{ p: 2 }}>
             Drone Footage
           </Typography>
           <Box
@@ -194,7 +201,7 @@ const DronePath = () => {
             overflow: "hidden",
           }}
         >
-          <Typography variant="h6" sx={{ p: 1 }}>
+          <Typography variant="h5" sx={{ p: 2 }}>
             Drone Path
           </Typography>
           <Box sx={{ height: "calc(100% - 48px)" }}>
@@ -254,9 +261,6 @@ const DronePath = () => {
                 Places
               </Button>
             </Stack>
-            <Button size="small" variant="contained">
-              Add All
-            </Button>
           </Stack>
           <Stack sx={{ border: "2px solid var(--primary-color)", py: 1 }}>
             <Stack
@@ -322,7 +326,7 @@ const DronePath = () => {
 
           <Stack direction="row" sx={{ border:"2px solid var(--primary-color)" ,p:1,mt:2}}>
           <Stack direction="row" sx={{ flexWrap: "wrap",height:"38vh",overflowY
-:"auto"
+:"auto",alignItems:"stretch"
 		  }}>
             {nodeList.map((node, index) => (
               <Box
@@ -334,13 +338,14 @@ const DronePath = () => {
                   padding: 2,
                   minWidth: 200,
                   maxWidth: 300,
+				  maxHeight: "26vh",
                   backgroundColor: "#f9f9f9",
 				  m:1.5
                 }}
               >
                 <IconButton
                   size="small"
-                  onClick={() => handleDeleteNode(node)}
+                  onClick={() => handleDeleteNode(node.id)}
                   sx={{
                     position: "absolute",
                     top: 1,
@@ -349,7 +354,7 @@ const DronePath = () => {
                 >
                   <CloseIcon fontSize="small" />
                 </IconButton>
-                <Typography variant="h6" lineHeight={1} mb={1} mt={1} gutterBottom>
+                <Typography variant="h6" lineHeight={1.3} mb={1} mt={1} gutterBottom>
                   {node.name}
                 </Typography>
                 <Typography color="var(--primary-color)" fontWeight={600} variant="body2">

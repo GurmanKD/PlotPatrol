@@ -32,7 +32,7 @@ const Navbar = () => {
         </Box>
       </Stack>
 
-      <Stack mt={12} px={3} gap={1}>
+      <Stack mt={11} px={3} gap={1}>
         {navOptns.map((navOptn, index) => (
           <Stack
             key={navOptn.navPath || index}
