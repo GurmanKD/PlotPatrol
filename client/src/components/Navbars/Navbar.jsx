@@ -1,10 +1,9 @@
 import { Box, Stack, Typography } from "@mui/material";
-import React from "react";
 import navOptns from "./NavbarConfig.jsx";
 import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
-  const selectedStyle = { background: "#FEA900", color: "white" };
+  const selectedStyle = { background: "var(--primary-color)", color: "white" };
   const navigate = useNavigate();
 
   return (
@@ -20,7 +19,7 @@ const Navbar = () => {
           Plot
         </Typography>
         <Box
-          sx={{ px: 1, borderRadius: 1, background: "#FEA900", color: "white" }}
+          sx={{ px: 1, borderRadius: 1, background: "var(--primary-color)", color: "white" }}
         >
           <Typography
             variant="h4"

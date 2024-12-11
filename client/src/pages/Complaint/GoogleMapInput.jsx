@@ -138,7 +138,7 @@ const GoogleMapInput = ({ onChange, onUseCurrentLocation, onPlaceSelected }) => 
       <TextField
         inputRef={inputRef}
         name="location"
-        label="Search for a location"
+        label="Search location"
         variant="standard"
         sx={{ alignSelf: "flex-start", width: "80%" }}
         size="small"

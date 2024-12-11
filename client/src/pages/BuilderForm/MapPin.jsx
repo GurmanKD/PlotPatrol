@@ -1,18 +1,18 @@
 import { useState, useRef } from 'react';
 import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
-import { Box, Button, Switch, FormControlLabel, TextField } from '@mui/material';
+import { Box, Button, Switch, FormControlLabel, TextField, Stack } from '@mui/material';
 
-const MapComponent = () => {
+const MapPinComp = ({markers, setMarkers,searchLocation, setSearchLocation}) => {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: 'AIzaSyAbclwHdrmNLwoUpd-6qTiD8uF6-95gxxc',
-    libraries: ['places']
+    libraries: ['places'],
   });
 
   const [currentLocation, setCurrentLocation] = useState(null);
-  const [markers, setMarkers] = useState([]);
   const [enablePinning, setEnablePinning] = useState(false);
-  const [searchLocation, setSearchLocation] = useState('');
   
+
+
   const mapRef = useRef(null);
   const searchInputRef = useRef(null);
   const autocompleteRef = useRef(null);
@@ -27,12 +27,10 @@ const MapComponent = () => {
       }
     );
 
-    // Bind autocomplete to map bounds
     if (mapRef.current) {
       autocompleteRef.current.bindTo('bounds', mapRef.current);
     }
 
-    // Handle place selection
     autocompleteRef.current.addListener('place_changed', () => {
       const place = autocompleteRef.current.getPlace();
 
@@ -41,7 +39,6 @@ const MapComponent = () => {
         return;
       }
 
-      // Update map view
       const newLocation = {
         lat: place.geometry.location.lat(),
         lng: place.geometry.location.lng()
@@ -49,7 +46,6 @@ const MapComponent = () => {
 
       setCurrentLocation(newLocation);
       
-      // If viewport is available, use it
       if (place.geometry.viewport && mapRef.current) {
         mapRef.current.fitBounds(place.geometry.viewport);
       } else if (mapRef.current) {
@@ -57,7 +53,6 @@ const MapComponent = () => {
         mapRef.current.setZoom(17);
       }
 
-      // Update search location text
       setSearchLocation(place.formatted_address);
     });
   };
@@ -70,7 +65,6 @@ const MapComponent = () => {
           const newLocation = { lat: latitude, lng: longitude };
           setCurrentLocation(newLocation);
           
-          // Reverse geocoding to get address
           const geocoder = new window.google.maps.Geocoder();
           geocoder.geocode({ location: newLocation }, (results, status) => {
             if (status === 'OK' && results[0]) {
@@ -102,35 +96,37 @@ const MapComponent = () => {
   };
 
   const handleToggle = () => {
-    setEnablePinning((prev) => !prev);
-    if (!enablePinning) setMarkers([]); // Reset markers when disabling pinning
+    if (enablePinning) setMarkers([]); 
+    setEnablePinning(!enablePinning);
   };
 
   if (!isLoaded) return <div>Loading...</div>;
 
   return (
-    <Box sx={{ width: '100%', height: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
       <Box sx={{ 
-        p: 2, 
+        py: 2, 
         display: 'flex', 
         justifyContent: 'space-between', 
         alignItems: 'center',
-        flexWrap: 'wrap',
         gap: 2
       }}>
+        <Stack direction="row" width="60%" alignItems="flex-end" gap={2}>
+
         <TextField
           inputRef={searchInputRef}
           value={searchLocation}
           onChange={(e) => setSearchLocation(e.target.value)}
           label="Search location"
-          variant="outlined"
+          variant="standard"
           size="small"
-          sx={{ minWidth: '250px', flex: 1 }}
-        />
-        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+          sx={{ width: "70%" }}
+          />
           <Button variant="contained" onClick={handleCurrentLocation}>
             Current Location
           </Button>
+          </Stack>
+        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
           <FormControlLabel
             control={<Switch checked={enablePinning} onChange={handleToggle} />}
             label="Enable Pinning"
@@ -139,9 +135,10 @@ const MapComponent = () => {
       </Box>
       <Box sx={{ flex: 1 }}>
         <GoogleMap
-          mapContainerStyle={{ width: '100%', height: '100%' }}
+          mapContainerStyle={{ width: '100%', height: 450 }}
           center={currentLocation || { lat: 37.7749, lng: -122.4194 }}
           zoom={currentLocation ? 15 : 12}
+          mapTypeId="satellite"
           onClick={handleMapClick}
           onLoad={handleMapLoad}
         >
@@ -162,4 +159,4 @@ const MapComponent = () => {
   );
 };
 
-export default MapComponent;
+export default MapPinComp;

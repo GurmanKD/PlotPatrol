@@ -1,6 +1,6 @@
 const config={
 	api:{
-		baseUrl:'http://localhost:3001',
+		baseUrl:'http://172.16.17.229:5673',
 	},
 	cloudinary:{
 		cloudName:'dnzgifrcv',

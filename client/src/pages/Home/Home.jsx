@@ -17,6 +17,24 @@ import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import Carousel from "react-material-ui-carousel";
 import { Close } from "@mui/icons-material";
 import ComplaintLog from "./ComplaintLog";
+import Model from "../../components/model";
+
+
+const stageNames={
+  1:"Foundation ",
+  2:"Construction",
+  3:"Adv.Construction",
+  4:"Final"
+}
+
+
+const modelSize={
+  1:335,
+  2:295,
+  3:290,
+  4:295
+}
+
 
 const Home = () => {
   const building = "Building Name";
@@ -28,10 +46,10 @@ const Home = () => {
   // 2->complaints
   // 3->3d model
 
-  const status = 2;
-  const currStage = 3;
-  const [stageNum, setStageNum] = React.useState(3);
-  const stage = "Construction";
+  const status = 1;
+  const stage = 4;
+  const [stageNum, setStageNum] = React.useState(stage);
+
 
   const [mode, setMode] = React.useState(1);
   // 1->drone
@@ -41,15 +59,23 @@ const Home = () => {
 
   const [review, setReview] = React.useState("");
 
-  const droneImgs = ["/me.png", "/me.png", "/me.png", "/me.png", "/me.png"];
-  const originalImgs = ["/me.png", "/me.png", "/me.png", "/me.png", "/me.png"];
+  
+
+  const droneImgs = {
+    1:["https://i.ibb.co/zZH85d0/Whats-App-Image-2024-12-09-at-21-01-45-ca32ec1e.jpg",],
+    2:["https://i.ibb.co/rQs5V25/Whats-App-Image-2024-12-09-at-21-00-07-d9e90c9e.jpg"],
+    3:["https://i.ibb.co/pd1VPs0/Whats-App-Image-2024-12-09-at-20-57-11-a9ba30b0.jpg",],
+    4:["https://i.ibb.co/7rBwChg/Whats-App-Image-2024-12-09-at-20-44-48-8ef2472b.jpg"],
+
+  };
+  const originalImgs = ["https://i.ibb.co/zZH85d0/Whats-App-Image-2024-12-09-at-21-01-45-ca32ec1e.jpg", "https://i.ibb.co/rQs5V25/Whats-App-Image-2024-12-09-at-21-00-07-d9e90c9e.jpg", "https://i.ibb.co/pd1VPs0/Whats-App-Image-2024-12-09-at-20-57-11-a9ba30b0.jpg", "https://i.ibb.co/7rBwChg/Whats-App-Image-2024-12-09-at-20-44-48-8ef2472b.jpg"];
 
 
   const complaints=[
     {
       description:
         "Complaint about loud noise during nighttime. Complaint about loud noise during nighttime.Complaiut loud noise during nighttime.",
-      attachment: ["/me.png", "/me.png"],
+      attachment: ["https://i.ibb.co/zZH85d0/Whats-App-Image-2024-12-09-at-21-01-45-ca32ec1e.jpg", "https://i.ibb.co/rQs5V25/Whats-App-Image-2024-12-09-at-21-00-07-d9e90c9e.jpg"],
       address: "123 Elm Street, Springfield",
       coords: { lat: 40.7128, lng: -74.006 },
       user: {
@@ -58,7 +84,7 @@ const Home = () => {
     },
     {
       description: "Broken streetlight at the main intersection.",
-      attachment: ["/me.png"],
+      attachment: ["https://i.ibb.co/pd1VPs0/Whats-App-Image-2024-12-09-at-20-57-11-a9ba30b0.jpg"],
       address: "456 Oak Avenue, Springfield",
       coords: { lat: 40.7129, lng: -74.007 },
       user: {
@@ -71,6 +97,7 @@ const Home = () => {
 
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: "AIzaSyAbclwHdrmNLwoUpd-6qTiD8uF6-95gxxc",
+    libraries: ['places'],
   });
 
   return (
@@ -159,7 +186,7 @@ const Home = () => {
                 sx={{
                   width: 1,
                   background:
-                    status === 1 ? "red" : status === 2 ? "#ff7000" : "green",
+                    status === 1 ? "var(--error)" : status === 2 ? "var(--intermediate)" : "var(--success)",
 
                   borderRadius: 2,
                   px: 2,
@@ -196,7 +223,7 @@ const Home = () => {
                   variant="body1"
                   color="var(--primary-color)"
                 >
-                  {stage}
+                  {stageNames[stage]}
                 </Typography>
               </Box>
 
@@ -308,7 +335,7 @@ const Home = () => {
               py: 1,
               mb: 2,
               background:
-                status === 1 ? "red" : status === 2 ? "#ff7000" : "green",
+                status === 1 ? "var(--error)" : status === 2 ? "var(--intermediate)" : "var(--success)",
             }}
           >
             <Typography textAlign="center" color="white" variant="h6">
@@ -316,7 +343,7 @@ const Home = () => {
               <span
                 style={{ fontSize: "16px", fontWeight: 400, marginLeft: "2%" }}
               >
-                {stage}
+                {stageNames[stage]}
               </span>
             </Typography>
           </Paper>
@@ -337,7 +364,7 @@ const Home = () => {
               justifyContent="space-evenly"
               mb={2}
             >
-              {[1, 2, 3, 4, 5, 6].map((el) => {
+              {[1, 2, 3, 4, ].map((el) => {
                 return (
                   <Button
                     key={el}
@@ -350,7 +377,7 @@ const Home = () => {
                       fontSize: "14px",
                     }}
                     variant={el === stageNum ? "contained" : "outlined"}
-                    disabled={el > currStage}
+                    disabled={el > stage}
                     onClick={() => {
                       if (el !== stageNum) setStageNum(el);
                     }}
@@ -456,9 +483,9 @@ const Home = () => {
                       height: "100%",
                     }}
                   >
-                    {!droneImgs || droneImgs.length === 0
+                    {!droneImgs[stageNum] || droneImgs[stageNum].length === 0
                       ? null
-                      : droneImgs.map((val) => (
+                      : droneImgs[stageNum].map((val) => (
                           <Stack
                             key={val}
                             sx={{
@@ -522,7 +549,12 @@ const Home = () => {
                   </>
                 )}
 
-                {mode === 3 && <Box></Box>}
+
+                {mode === 4 && 
+                  <Box height={1}>
+                    <Model stage={stageNum} size={modelSize[stageNum]}/>
+                  </Box>
+                }
               </Box>
             </Stack>
           </Paper>
@@ -540,7 +572,7 @@ const Home = () => {
               <Stack width={1}>
                 <TextField
                   variant="outlined"
-                  label="Leave your review"
+                  label="AI reviews"
                   multiline
                   value={review}
                   onChange={(e) => setReview(e.target.value)}

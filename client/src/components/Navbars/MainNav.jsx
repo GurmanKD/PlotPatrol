@@ -1,13 +1,11 @@
-import { Button, Stack, Box, IconButton } from "@mui/material";
-import React from "react";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { Button, Stack, Box } from "@mui/material";
 
 const MainNav = () => {
   return (
     <Stack
       direction="row"
       alignItems="center"
-      justifyContent="space-between"
+      justifyContent="flex-end"
 	  width="100%"
 	  sx={{ position: "sticky", 
         top: 0, 
@@ -18,13 +16,12 @@ const MainNav = () => {
       px={3}
     >
 
-		Hi 
 
       <Stack direction="row" alignItems="center" justifyContent="flex-end" gap={2} pr={4}>
-        <Button variant="contained" color="primary"  sx={{ color: "white",px:4 }}>
+        <Button variant="contained" color="primary"  sx={{ color: "white",px:4, fontSize:"16px" }}>
           Settings
         </Button>
-        <Button variant="contained" color="primary" sx={{ color: "white",px:4 }}>
+        <Button variant="contained" color="primary" sx={{ color: "white",px:4, fontSize:"16px" }}>
           Logout
         </Button>
 

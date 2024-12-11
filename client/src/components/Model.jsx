@@ -1,25 +1,45 @@
-// import { Canvas } from '@react-three/fiber';
-// import { OrbitControls, useGLTF } from '@react-three/drei';
+/* eslint-disable react/no-unknown-property */
+import { Suspense } from 'react';
+import { Environment, OrbitControls, OrthographicCamera } from '@react-three/drei';
+import { Canvas } from '@react-three/fiber';
 
-// const Model = ({ url }) => {
-//   const { scene } = useGLTF(url); 
-//   return <primitive object={scene} />;
-// };
+import { Skeleton } from '@mui/material';
+import { Stage1 } from '../models/Stage1';
+import { Stage2 } from '../models/Stage2';
+import { Stage3 } from '../models/Stage3';
+import { Stage4 } from '../models/Stage4';
 
-// // Main App Component
-// const App = () => {
-//   return (
-//     <Canvas>
-//       {/* Add ambient light */}
-//       <ambientLight intensity={0.5} />
-//       {/* Add directional light */}
-//       <directionalLight position={[10, 10, 5]} intensity={1} />
-//       {/* Render the model */}
-//       <Model url="https://example.com/model.glb" />
-//       {/* Enable orbit controls for better view */}
-//       <OrbitControls />
-//     </Canvas>
-//   );
-// };
+function Loading() {
+  return (
+    <Skeleton animation="wave" variant="rounded" width="100%" height="75vh" />
+  );
+}
 
-// export default App;
+export default function Model({stage,size}) {
+	console.log(stage);
+
+  return (
+    <div style={{ height: '32vh' }}>
+      <Canvas>
+        <OrthographicCamera makeDefault position={[0, 0, 105]} zoom={size} />
+
+        <OrbitControls
+          enablePan={false} 
+          target={[0, 0, 0]} 
+          maxPolarAngle={Math.PI / 2} 
+          minPolarAngle={0}
+        />
+
+        <ambientLight castShadow />
+        <Environment preset="sunset"></Environment>
+
+        <Suspense fallback={<Loading />}>
+		  {stage===1 && <Stage1 position={[0, 0, 0]} />}
+		  {stage===2 && <Stage2 position={[0, 0, 0]} />}
+		  {stage===3 && <Stage3 position={[0, 0, 0]} />}
+		  {stage===4 && <Stage4 position={[0, 0, 0]} />}
+        </Suspense>
+      </Canvas>
+    </div>
+  );
+}

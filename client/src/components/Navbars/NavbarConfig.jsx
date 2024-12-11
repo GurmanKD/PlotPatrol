@@ -17,8 +17,13 @@ const navOptns = [
     navIcon: <HomeIcon />,
   },
   {
-    navName: 'Option 2',
-    navPath: '/t2',
+    navName: 'Compare Maps',
+    navPath: '/compare',
+    navIcon: <HomeIcon />,
+  },
+  {
+    navName: 'Builder Form',
+    navPath: '/builder-form',
     navIcon: <HomeIcon />,
   },
 ];
