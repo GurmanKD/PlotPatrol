@@ -16,11 +16,7 @@ const navOptns = [
     navPath: '/complaint2',
     navIcon: <HomeIcon />,
   },
-  {
-    navName: 'Compare Maps',
-    navPath: '/compare',
-    navIcon: <HomeIcon />,
-  },
+
   {
     navName: 'Builder Form',
     navPath: '/builder-form',
@@ -34,6 +30,11 @@ const navOptns = [
   {
     navName: 'Drone Paths',
     navPath: '/drone-path',
+    navIcon: <HomeIcon />,
+  },
+  {
+    navName: 'Compare Satellite Images',
+    navPath: '/sat-compare',
     navIcon: <HomeIcon />,
   },
 ];

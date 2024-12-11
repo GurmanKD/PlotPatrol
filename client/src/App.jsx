@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import EarthMap from "./pages/EarthMap/EarthMap";
@@ -15,24 +16,41 @@ import DronePath from "./pages/DronePath/DronePath";
 import MCD from "./pages/MCD/MCD";
 import Schedule from "./pages/Schedule/Schedule";
 
+=======
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Home from './pages/Home/Home';
+import EarthMap from './pages/EarthMap/EarthMap';
+import Protected from './layouts/Protected';
+import Dashboard from './layouts/Dashboard';
+import SatCompare from './pages/SatCompare/SatCompare';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { CssBaseline } from '@mui/material';
+import Complaint from './pages/Complaint/Complaint';
+import Complaint2 from './pages/Complaint/Complaint2';
+import Compare from './pages/SatCompare/Compare';
+import BuilderForm from './pages/BuilderForm/BuilderForm';
+import GoogleMapInput from './pages/Test/test';
+import Buildings from './pages/Buildings/Buildings';
+import DronePath from './pages/DronePath/DronePath';
+>>>>>>> 1e485b0 (Refactor navigation and add Compare Satellite Images page)
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#4169E1", 
+      main: '#4169E1',
     },
     secondary: {
-      main: "#979797",
+      main: '#979797',
     },
     error: {
-      main: "#c3122f", 
+      main: '#c3122f',
     },
-    success:{
-      main:"#4cbb17",
-    }
+    success: {
+      main: '#4cbb17',
+    },
   },
   typography: {
-    fontFamily: "Poppins, Arial, sans-serif",
+    fontFamily: 'Poppins, Arial, sans-serif',
   },
 
   components: {
@@ -71,33 +89,65 @@ const theme = createTheme({
       },
     },
   },
-
-
 });
 
 function App() {
   return (
     <div>
       <ThemeProvider theme={theme}>
-        <CssBaseline /> 
+        <CssBaseline />
         <BrowserRouter>
           <Routes>
-            
             <Route
-              path="/"
+              path='/'
               element={<Protected element={<Dashboard element={<Home />} />} />}
             ></Route>
-            
-            <Route path="/maps" element={<EarthMap />}></Route>
-            <Route path="/schedule" element={<Protected element={<Dashboard element={<Schedule/>} />} />}></Route>
-            <Route path="/dashboard" element={<Protected element={<Dashboard element={<MCD/>} />} />}></Route>
-            <Route path="/complaint" element={<Protected element={<Dashboard element={<Complaint />} />} />}></Route>
-            <Route path="/complaint2" element={<Protected element={<Dashboard element={<Complaint2 />} />} />}></Route>
-            <Route path="/compare" element={<Protected element={<Dashboard element={<Compare />} />} />}></Route>
-            <Route path="/builder-form" element={<Protected element={<Dashboard element={<BuilderForm />} />} />}></Route>
-            <Route path="/buildings" element={<Protected element={<Dashboard element={<Buildings />} />} />}></Route>
-            <Route path="/drone-path" element={<Protected element={<Dashboard element={<DronePath />} />} />}></Route>
-            <Route path="/test" element={<Protected element={<Dashboard element={<GoogleMapInput />} />} />}></Route>
+
+            <Route path='/maps' element={<EarthMap />}></Route>
+            <Route
+              path='/complaint'
+              element={
+                <Protected element={<Dashboard element={<Complaint />} />} />
+              }
+            ></Route>
+            <Route
+              path='/complaint2'
+              element={
+                <Protected element={<Dashboard element={<Complaint2 />} />} />
+              }
+            ></Route>
+            <Route
+              path='/builder-form'
+              element={
+                <Protected element={<Dashboard element={<BuilderForm />} />} />
+              }
+            ></Route>
+            <Route
+              path='/buildings'
+              element={
+                <Protected element={<Dashboard element={<Buildings />} />} />
+              }
+            ></Route>
+            <Route
+              path='/drone-path'
+              element={
+                <Protected element={<Dashboard element={<DronePath />} />} />
+              }
+            ></Route>
+            <Route
+              path='/sat-compare'
+              element={
+                <Protected element={<Dashboard element={<SatCompare />} />} />
+              }
+            ></Route>
+            <Route
+              path='/test'
+              element={
+                <Protected
+                  element={<Dashboard element={<GoogleMapInput />} />}
+                />
+              }
+            ></Route>
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
