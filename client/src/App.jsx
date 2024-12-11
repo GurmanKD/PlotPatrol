@@ -1,39 +1,36 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home/Home";
-import EarthMap from "./pages/EarthMap/EarthMap";
-import Protected from "./layouts/Protected";
-import Dashboard from "./layouts/Dashboard";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { CssBaseline } from "@mui/material";
-import Complaint from "./pages/Complaint/Complaint";
-import Complaint2 from "./pages/Complaint/Complaint2";
-import Compare from "./pages/Compare/Compare";
-import BuilderForm from "./pages/BuilderForm/BuilderForm";
-import GoogleMapInput from "./pages/Test/test";
-import Buildings from "./pages/Buildings/Buildings";
-import DronePath from "./pages/DronePath/DronePath";
-import MCD from "./pages/MCD/MCD";
-import Schedule from "./pages/Schedule/Schedule";
-import Surveys from "./pages/Surveys/Surveys";
-
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Home from './pages/Home/Home';
+import EarthMap from './pages/EarthMap/EarthMap';
+import Protected from './layouts/Protected';
+import Dashboard from './layouts/Dashboard';
+import SatCompare from './pages/SatCompare/SatCompare';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { CssBaseline } from '@mui/material';
+import Complaint from './pages/Complaint/Complaint';
+import Complaint2 from './pages/Complaint/Complaint2';
+import Compare from './pages/SatCompare/Compare';
+import BuilderForm from './pages/BuilderForm/BuilderForm';
+import GoogleMapInput from './pages/Test/test';
+import Buildings from './pages/Buildings/Buildings';
+import DronePath from './pages/DronePath/DronePath';
+import Surveys from './pages/Surveys/Surveys';
+import Schedule from './pages/Schedule/Schedule';
+import MCD from './pages/MCD/MCD';
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#4169E1", 
+      main: '#4169E1',
     },
     secondary: {
-      main: "#979797",
+      main: '#979797',
     },
     error: {
       main: "#ff002b", 
     },
-    success:{
-      main:"#4cbb17",
-    }
   },
   typography: {
-    fontFamily: "Poppins, Arial, sans-serif",
+    fontFamily: 'Poppins, Arial, sans-serif',
   },
 
   components: {
@@ -72,20 +69,17 @@ const theme = createTheme({
       },
     },
   },
-
-
 });
 
 function App() {
   return (
     <div>
       <ThemeProvider theme={theme}>
-        <CssBaseline /> 
+        <CssBaseline />
         <BrowserRouter>
           <Routes>
-            
             <Route
-              path="/"
+              path='/'
               element={<Protected element={<Dashboard element={<Home />} />} />}
             ></Route>
             
@@ -97,6 +91,7 @@ function App() {
             <Route path="/compare" element={<Protected element={<Dashboard element={<Compare />} />} />}></Route>
             <Route path="/builder-form" element={<Protected element={<Dashboard element={<BuilderForm />} />} />}></Route>
             <Route path="/buildings" element={<Protected element={<Dashboard element={<Buildings />} />} />}></Route>
+            <Route path="/sat-compare" element={<Protected element={<Dashboard element={<SatCompare />} />} />}></Route>
             <Route path="/drone-path/:id" element={<Protected element={<Dashboard element={<DronePath />} />} />}></Route>
             <Route path="/survey" element={<Protected element={<Dashboard element={<Surveys />} />} />}></Route>
             <Route path="/test" element={<Protected element={<Dashboard element={<GoogleMapInput />} />} />}></Route>
