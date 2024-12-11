@@ -25,6 +25,10 @@ import {
   Delete,
   LocationOn,
   ZoomIn,
+<<<<<<< HEAD
+=======
+  ContentCopy,
+>>>>>>> b4d821ea13fcc2300455b32b49840b1ec69ca58a
 } from '@mui/icons-material';
 import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
@@ -134,6 +138,12 @@ const MapAreaLock = () => {
     setMiniMapCenter(null);
   };
 
+<<<<<<< HEAD
+=======
+  const copyCoordinates = (lat, lng) => {
+    navigator.clipboard.writeText(`${lat}, ${lng}`);
+  };
+>>>>>>> b4d821ea13fcc2300455b32b49840b1ec69ca58a
 
   const showPlaceOnMap = (place) => {
     setSelectedPlace(place);

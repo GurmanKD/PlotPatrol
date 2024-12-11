@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React, { useEffect, useState } from "react";
+=======
+import React, { useState } from "react";
+>>>>>>> b4d821ea13fcc2300455b32b49840b1ec69ca58a
 import {
   Box,
   Button,
@@ -10,9 +14,12 @@ import {
 import PincodeMap from "./PincodeMap";
 import { Add } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
+<<<<<<< HEAD
 import { getPlacesInPincode } from "./PinCodePlaces";
 import axios from "axios";
 import config from "../../config";
+=======
+>>>>>>> b4d821ea13fcc2300455b32b49840b1ec69ca58a
 
 const DronePath = () => {
   const [mode, setMode] = useState(1);
@@ -20,6 +27,7 @@ const DronePath = () => {
   // 2--> Complaints
   // 3--> Places
 
+<<<<<<< HEAD
   const [data,setData] = useState({
     1: [],
     2: [],
@@ -108,11 +116,193 @@ const DronePath = () => {
 	  fetchInitialData();			
 	  fetchPlaces();
   },[])
+=======
+  const data = {
+    1: [
+      {
+        name: "Greenfield High School",
+        builder: "Ravi Mehta",
+        complaint_category: "Noise Complaint",
+        lat: 28.5355,
+        lng: 77.391,
+        type: "School",
+      },
+      {
+        name: "Sunshine Academy",
+        builder: "Neha Sharma",
+        complaint_category: "",
+        lat: 28.7041,
+        lng: 77.1025,
+        type: "School",
+      },
+      {
+        name: "Harmony Public School",
+        builder: "Ansh Sehrawat",
+        complaint_category: "Pavement Issue",
+        lat: 19.076,
+        lng: 72.8777,
+        type: "School",
+      },
+      {
+        name: "Little Star School",
+        builder: "Arjun Kapoor",
+        complaint_category: "",
+        lat: 12.9716,
+        lng: 77.5946,
+        type: "School",
+      },
+      {
+        name: "Rainbow Kids School",
+        builder: "Ravi Mehta",
+        complaint_category: "Waterlogging",
+        lat: 22.5726,
+        lng: 88.3639,
+        type: "School",
+      },
+    ],
+    2: [
+      {
+        name: "Sunnyvale Residency",
+        builder: "Neha Sharma",
+        complaint_category: "Extended Pavement",
+        lat: 19.076,
+        lng: 72.8777,
+        type: "Residential",
+      },
+      {
+        name: "Blue Ridge Apartments",
+        builder: "",
+        complaint_category: "Extra Floor",
+        lat: 28.5355,
+        lng: 77.391,
+        type: "Residential",
+      },
+      {
+        name: "Maple Grove Apartments",
+        builder: "Arjun Kapoor",
+        complaint_category: "Inside Parking",
+        lat: 12.9716,
+        lng: 77.5946,
+        type: "Residential",
+      },
+      {
+        name: "Green Valley Residency",
+        builder: "Ravi Mehta",
+        complaint_category: "Encroachment on Public Property",
+        lat: 28.7041,
+        lng: 77.1025,
+        type: "Residential",
+      },
+      {
+        name: "Hilltop Residency",
+        builder: "Neha Sharma",
+        complaint_category: "Extended Balcony",
+        lat: 22.5726,
+        lng: 88.3639,
+        type: "Residential",
+      },
+    ],
+    3: [
+      {
+        name: "Harmony Business Park",
+        builder: "Arjun Kapoor",
+        complaint_category: "",
+        lat: 12.9716,
+        lng: 77.5946,
+        type: "Commercial",
+      },
+      {
+        name: "Blue Horizon Offices",
+        builder: "Ravi Mehta",
+        complaint_category: "Noise Complaint",
+        lat: 28.5355,
+        lng: 77.391,
+        type: "Commercial",
+      },
+      {
+        name: "Green Public School",
+        builder: "",
+        complaint_category: "",
+        lat: 28.7041,
+        lng: 77.1025,
+        type: "School",
+      },
+      {
+        name: "tata Steels & Co.",
+        builder: "Neha Sharma",
+        complaint_category: "Pavement Issue",
+        lat: 19.076,
+        lng: 72.8777,
+        type: "Industry",
+      },
+      {
+        name: "Emerald Business Hub",
+        builder: "Arjun Kapoor",
+        complaint_category: "Power Outage",
+        lat: 22.5726,
+        lng: 88.3639,
+        type: "Commercial",
+      },
+      {
+        name: "Golden Valley Public School",
+        builder: "",
+        complaint_category: "Waterlogging",
+        lat: 12.9716,
+        lng: 77.5946,
+        type: "School",
+      },
+    ],
+  };
+
+  const [nodeList, setNodeList] = useState([
+    {
+      name: "Sunnyvale Residency",
+      builder: "Neha Sharma",
+      complaint_category: "Extended Pavement",
+      lat: 19.076,
+      lng: 72.8777,
+      type: "Residential",
+    },
+    {
+      name: "Blue Ridge Apartments",
+      builder: "",
+      complaint_category: "Extra Floor",
+      lat: 28.5355,
+      lng: 77.391,
+      type: "Residential",
+    },
+    {
+      name: "Maple Grove Apartments",
+      builder: "Arjun Kapoor",
+      complaint_category: "Inside Parking",
+      lat: 12.9716,
+      lng: 77.5946,
+      type: "Residential",
+    },
+    {
+      name: "Green Valley Residency",
+      builder: "Ravi Mehta",
+      complaint_category: "Encroachment on Public Property",
+      lat: 28.7041,
+      lng: 77.1025,
+      type: "Residential",
+    },
+    {
+      name: "Hilltop Residency",
+      builder: "Neha Sharma",
+      complaint_category: "Extended Balcony",
+      lat: 22.5726,
+      lng: 88.3639,
+      type: "Residential",
+    },
+  ]);
+>>>>>>> b4d821ea13fcc2300455b32b49840b1ec69ca58a
 
   const handleRemove = (index) => {
     setNodeList(nodeList.filter((_, i) => i !== index));
   };
 
+<<<<<<< HEAD
 
   const handleAddNode = async(data) => {
 	try {
@@ -152,6 +342,8 @@ const DronePath = () => {
 
 
 
+=======
+>>>>>>> b4d821ea13fcc2300455b32b49840b1ec69ca58a
   return (
     <Box>
       <Box
@@ -305,7 +497,11 @@ const DronePath = () => {
                     color="primary"
                     size="small"
                     sx={{ border: "2px solid" }}
+<<<<<<< HEAD
                     onClick={() => {handleAddNode(item)}}
+=======
+                    onClick={() => {}}
+>>>>>>> b4d821ea13fcc2300455b32b49840b1ec69ca58a
                   >
                     <Add fontSize="inherit" />
                   </IconButton>
@@ -340,7 +536,11 @@ const DronePath = () => {
               >
                 <IconButton
                   size="small"
+<<<<<<< HEAD
                   onClick={() => handleDeleteNode(node)}
+=======
+                  onClick={() => handleRemove(index)}
+>>>>>>> b4d821ea13fcc2300455b32b49840b1ec69ca58a
                   sx={{
                     position: "absolute",
                     top: 1,
@@ -353,7 +553,11 @@ const DronePath = () => {
                   {node.name}
                 </Typography>
                 <Typography color="var(--primary-color)" fontWeight={600} variant="body2">
+<<<<<<< HEAD
 				{`${node?.lat?.toFixed(6)}, ${node?.lng?.toFixed(6)}`}
+=======
+				{`${node.lat.toFixed(6)}, ${node.lng.toFixed(6)}`}
+>>>>>>> b4d821ea13fcc2300455b32b49840b1ec69ca58a
                 </Typography>
 
 				<Box sx={{border:"2px solid var(--primary-color)",borderRadius:4,width:"fit-content",px:2,mt:1}}>

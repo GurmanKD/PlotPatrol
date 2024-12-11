@@ -12,6 +12,12 @@ import BuilderForm from "./pages/BuilderForm/BuilderForm";
 import GoogleMapInput from "./pages/Test/test";
 import Buildings from "./pages/Buildings/Buildings";
 import DronePath from "./pages/DronePath/DronePath";
+<<<<<<< HEAD
+=======
+import MCD from "./pages/MCD/MCD";
+import Schedule from "./pages/Schedule/Schedule";
+
+>>>>>>> b4d821ea13fcc2300455b32b49840b1ec69ca58a
 
 const theme = createTheme({
   palette: {
@@ -86,6 +92,11 @@ function App() {
             ></Route>
             
             <Route path="/maps" element={<EarthMap />}></Route>
+<<<<<<< HEAD
+=======
+            <Route path="/schedule" element={<Protected element={<Dashboard element={<Schedule/>} />} />}></Route>
+            <Route path="/dashboard" element={<Protected element={<Dashboard element={<MCD/>} />} />}></Route>
+>>>>>>> b4d821ea13fcc2300455b32b49840b1ec69ca58a
             <Route path="/complaint" element={<Protected element={<Dashboard element={<Complaint />} />} />}></Route>
             <Route path="/complaint2" element={<Protected element={<Dashboard element={<Complaint2 />} />} />}></Route>
             <Route path="/compare" element={<Protected element={<Dashboard element={<Compare />} />} />}></Route>
