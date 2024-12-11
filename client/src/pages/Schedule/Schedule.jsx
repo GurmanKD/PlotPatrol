@@ -3,7 +3,7 @@ import React, { useState } from "react";
 
 import PinMap from "../../components/PinMap";
 import FormModal from "../../components/FormModal";
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 function Schedule() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -30,8 +30,8 @@ function Schedule() {
   };
 
   return (
-    <>
-     <Typography variant="h4" gutterBottom>
+    <Box p={2}>
+     <Typography variant="h3" fontWeight={600} color="var(--primary-color)" gutterBottom>
                Schedule Survey
     </Typography>
       <PinMap showFormModal={handleShowModal} />
@@ -41,7 +41,7 @@ function Schedule() {
         regionName={regionName}
         onSubmit={handleSubmit}
       />
-    </>
+    </Box>
   );
 }
 
