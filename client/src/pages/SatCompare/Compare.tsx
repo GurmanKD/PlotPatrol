@@ -68,10 +68,11 @@ const Compare = () => {
         });
 
         const data = await response.json();
-        if (data.success) {
+   
+          console.log(data)
           setFinalResult(data.link); // Use the URL from the response
           setOpenModal(true); // Open the modal to show the image
-        }
+        
       }
     } finally {
       setLoading(false);
@@ -146,7 +147,7 @@ const Compare = () => {
       <Button variant="contained" sx={{ mt: 5 }} onClick={handleProceed} disabled={loading}>
         {loading ? <CircularProgress size={24} /> : 'Compare'}
       </Button>
-
+      <img src={finalResult} alt="Result" style={{ width: '100%' }} />
       <Modal open={openModal} onClose={handleCloseModal}>
         <Box
           sx={{
