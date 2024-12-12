@@ -168,7 +168,6 @@ const SatCompare = () => {
       </Box>
 
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth='lg'>
-        <DialogTitle>Flag</DialogTitle>
         <DialogContent>
           <Compare />
         </DialogContent>

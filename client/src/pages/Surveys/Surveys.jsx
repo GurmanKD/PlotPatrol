@@ -70,9 +70,8 @@ const Surveys = () => {
         setActiveSurveys(response.data.active);
         setPastSurveys(response.data.past);
       }
-      else alert("Failed to fetch data.");
     } catch (error) {
-      alert("Error fetching data.",error);
+      console.log("Error fetching data.",error);
     }
   }
 

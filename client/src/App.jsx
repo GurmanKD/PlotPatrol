@@ -28,6 +28,12 @@ const theme = createTheme({
     error: {
       main: "#ff002b", 
     },
+    success:{
+      main: "#4cbb17",
+    },
+    misc: {
+      main: "#FFC108", 
+    },
   },
   typography: {
     fontFamily: 'Poppins, Arial, sans-serif',
