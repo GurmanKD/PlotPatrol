@@ -44,7 +44,7 @@ const navOptns = [
     navIcon: <PollIcon />,
   },
   {
-    navName: 'Compare Satellite Images',
+    navName: 'Satellite Analysis',
     navPath: '/sat-compare',
     navIcon: <CompareIcon />,
   },
