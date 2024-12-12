@@ -10,7 +10,7 @@ import {
 import { Stack } from "@mui/system";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import Carousel from "react-material-ui-carousel";
 import Model from "../../components/model";
@@ -19,6 +19,7 @@ import config from "../../config";
 import MapWithMarkers from "../DronePath/DroneMap";
 import DownloadIcon from "@mui/icons-material/Download"; // Import the desired icon
 import Compare from "../SatCompare/Compare";
+import { Done } from "@mui/icons-material";
 
 
 const modelSize = {
@@ -133,6 +134,27 @@ const Report = () => {
         const url = res.data.download_url;
         console.log(url);
         window.open(url, "_blank");
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error(error);
+    }
+  };
+  
+  const navigate=useNavigate();
+  const handleMarkDone = async () => {
+    try {
+      setLoading(true);
+      const res = await axios.post(
+        config.api.baseUrl + "/inspection/mark-complete/",
+        {
+          inspection_id: id,
+        }
+      );
+      setLoading(false);
+
+      if (res.status === 200) {
+        navigate("/");
       }
     } catch (error) {
       setLoading(false);
@@ -602,6 +624,30 @@ const Report = () => {
           >
             <DownloadIcon /> 
              Overall Report
+          </Button>
+		  
+
+		  <Button
+            variant="outlined"
+            color="primary"
+            sx={{
+              width: 1,
+              borderRadius: 1,
+              fontWeight: 500,
+              fontSize: "18px",
+              borderWidth: "2px",
+              py: 2,
+              lineHeight: 1.4,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 1, 
+            }}
+            onClick={handleMarkDone}
+            disabled={loading}
+          >
+            <Done /> 
+             Mark Complete
           </Button>
 		  
 		  

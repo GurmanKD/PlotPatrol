@@ -12,11 +12,11 @@ const navOptns = [
     navIcon: <HomeIcon />,
 
   },
-  {
-    navName: 'Home',
-    navPath: '/home',
-    navIcon: <PollIcon />,
-  },
+  // {
+  //   navName: 'Home',
+  //   navPath: '/home',
+  //   navIcon: <PollIcon />,
+  // },
   {
     navName: 'Complaint',
     navPath: '/complaint',
