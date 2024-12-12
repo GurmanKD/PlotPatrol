@@ -16,6 +16,7 @@ import Model from "../../components/model";
 import axios from "axios";
 import config from "../../config";
 import MapWithMarkers from "../DronePath/DroneMap";
+import DownloadIcon from "@mui/icons-material/Download"; // Import the desired icon
 
 const modelSize = {
   1: 335,
@@ -25,8 +26,6 @@ const modelSize = {
 };
 
 const Report = () => {
-
-	
   const params = useParams();
   const id = params.id;
 
@@ -38,10 +37,7 @@ const Report = () => {
 
       if (res.status === 200) {
         setData(res.data);
-        console.log(
-          res.data
-        )
-
+        console.log(res.data);
       }
     } catch (error) {
       console.error(error);
@@ -56,10 +52,7 @@ const Report = () => {
 
       if (res.status === 200) {
         setMapData(res.data);
-        console.log(
-          res.data
-        )
-
+        console.log(res.data);
       }
     } catch (error) {
       console.error(error);
@@ -90,11 +83,10 @@ const Report = () => {
 
   const [nodeIdx, setNodeIdx] = useState(-1);
   const [nodeData, setNodeData] = useState([]);
-  const [mapData,setMapData]=useState([]);
+  const [mapData, setMapData] = useState([]);
   useEffect(() => {
     if (nodeIdx !== -1) {
       fetchNodeData();
-     
     }
   }, [nodeIdx]);
 
@@ -113,7 +105,7 @@ const Report = () => {
 
       if (res.status === 200) {
         const url = res.data.download_url;
-		console.log(url);
+        console.log(url);
         window.open(url, "_blank");
       }
     } catch (error) {
@@ -136,7 +128,7 @@ const Report = () => {
 
       if (res.status === 200) {
         const url = res.data.download_url;
-		console.log(url);
+        console.log(url);
         window.open(url, "_blank");
       }
     } catch (error) {
@@ -165,74 +157,13 @@ const Report = () => {
 
   return (
     <Box p={2}>
-      <Typography variant="h3" sx={{ fontWeight: 600, mb: 4}} color="primary">
+      <Typography variant="h3" sx={{ fontWeight: 600, mb: 4 }} color="primary">
         Survey Report{" "}
         <span style={{ color: "black", fontWeight: 500, fontSize: "32px" }}>
           {" "}
           - {data.area_pincode} | {dayjs(data.date).format("DD MMMM YYYY")}
         </span>
       </Typography>
-
-      <Stack direction="row" gap={4}>
-        <Paper sx={{ p: 2, width: 1 }} elevation={6}>
-          <Stack
-            gap={2}
-            width={1}
-            direction="row"
-            alignItems="center"
-            justifyContent="space-between"
-          >
-            <Paper elevation={10} sx={{ width: 1, p: 2 }}>
-              <Typography variant="h2" color="var(--primary-color)">
-                {data.total_nodes}
-              </Typography>
-              <Typography variant="h6">Total Nodes</Typography>
-            </Paper>
-            <Paper elevation={10} sx={{ width: 1, p: 2 }}>
-              <Typography variant="h2" color="var(--primary-color)">
-                {data.previous_flags}
-              </Typography>
-              <Typography variant="h6">Previous Flags</Typography>
-            </Paper>
-          </Stack>
-          <Stack
-            gap={2}
-            width={1}
-            mt={2}
-            direction="row"
-            alignItems="center"
-            justifyContent="space-between"
-          >
-            <Paper elevation={10} sx={{ width: 1, p: 2 }}>
-              <Typography variant="h2" color="var(--primary-color)">
-                {data.builder_projects}
-              </Typography>
-              <Typography variant="h6">Buildings</Typography>
-            </Paper>
-            <Paper elevation={10} sx={{ width: 1, p: 2 }}>
-              <Typography variant="h4" color="var(--primary-color)">
-                {data.complaints}
-              </Typography>
-              <Typography variant="h6">Complaints</Typography>
-            </Paper>
-          </Stack>
-        </Paper>
-        <Paper
-          elevation={3}
-          sx={{
-            width: 1,
-            overflow: "hidden",
-          }}
-        >
-          <Typography variant="h5" sx={{ p: 2 }}>
-            Drone Path
-          </Typography>
-          
-          <Box sx={{ height: "calc(100% - 48px)" }}>
-            <MapWithMarkers locations={mapData}/>
-          </Box>
-        </Paper>
-      </Stack>
 
       <Stack mt={5} direction="row" gap={4}>
         <Paper sx={{ width: "0.25", p: 2, pr: 0.4 }} elevation={6}>
@@ -303,13 +234,26 @@ const Report = () => {
             </Typography>
           ) : (
             <Box>
-              <Typography
-                variant="h5"
-                sx={{ mb: 2, fontWeight: 500,fontSize: "32px" }}
-                color={nodeData[0]?.active ? "success" : "error"}
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="space-between"
               >
-                {nodeData[0]?.active ? "Active" : "InActive"}
-              </Typography>
+                <Typography
+                  variant="h5"
+                  sx={{ mb: 2, fontWeight: 500, fontSize: "28px" }}
+                  color={nodeData[0]?.active ? "#3B6441" : "error"}
+                >
+                  {nodeData[0]?.active ? "Active" : "InActive"}
+                </Typography>
+                <Typography
+                  variant="h5"
+                  sx={{ mb: 2, fontWeight: 500, fontSize: "28px" }}
+                  color={!nodeData[0]?.is_flagged ? "#3B6441" : "error"}
+                >
+                  {nodeData[0]?.is_flagged ? "Flagged" : "Unflagged"}
+                </Typography>
+              </Stack>
               <Stack
                 direction="row"
                 gap={2}
@@ -335,7 +279,7 @@ const Report = () => {
                         if (i + 1 !== stageNum) setStageNum(i + 1);
                       }}
                     >
-                      {i + 1} {(nodeData[0]?.active && i===0) && "(Current)"}
+                      {i + 1} {nodeData[0]?.active && i === 0 && "(Current)"}
                     </Button>
                   );
                 })}
@@ -538,75 +482,119 @@ const Report = () => {
           )}
         </Paper>
 
-        <Stack justifyContent="center">
-          <Box
+        <Stack justifyContent="center" spacing={2}>
+          
+		  <Button
+            variant="outlined"
+            color="primary"
             sx={{
-              width: 1,
-              border: "2px solid",
-              borderColor: nodeIdx!==-1? nodeData[0]?.is_flagged
-                ? "var(--error-home)"
-                : "var(--success)":"var(--primary-color)",
-              color: nodeIdx!==-1? nodeData[0]?.is_flagged
-			  ? "var(--error-home)"
-			  : "var(--success)":"var(--primary-color)",
-              borderRadius: 2,
-              px: 2,
-              py: 1,
-              my: 2,
-            }}
-          >
-            {nodeIdx === -1 ? (
-              <Typography textAlign="center" variant="h6">
-			  Select a node
-			</Typography>
-            ) : (
-              <>
-                <Typography textAlign="center" variant="h6">
-                  Status
-                </Typography>
-
-                <Typography textAlign="center" variant="body1">
-                  {nodeData[0]?.is_flagged ? "Flagged" : "UnFlagged"}
-                </Typography>
-              </>
-            )}
-          </Box>
-
-          <Button
-            variant="contained"
-            color="misc"
-            sx={{
-              color: "white",
               width: 1,
               borderRadius: 1,
-              fontWeight: 600,
+              fontWeight: 500,
               fontSize: "18px",
-              my: 2,
+              borderWidth: "2px",
+              py: 2,
+              lineHeight: 1.4,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 1, 
             }}
             disabled={nodeIdx === -1 || loading}
             onClick={handleNodalReport}
           >
-            Download Nodal
-            <br /> Report
+            <DownloadIcon /> 
+            Nodal Report
           </Button>
 
-          <Button
-            variant="contained"
-            color="success"
+		  <Button
+            variant="outlined"
+            color="primary"
             sx={{
-              color: "white",
               width: 1,
               borderRadius: 1,
-              fontWeight: 600,
+              fontWeight: 500,
               fontSize: "18px",
-              my: 2,
+              borderWidth: "2px",
+              py: 2,
+              lineHeight: 1.4,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 1, 
             }}
             onClick={handleOverallReport}
             disabled={loading}
           >
-            Download Overall Report
+            <DownloadIcon /> 
+             Overall Report
           </Button>
+		  
+		  
+
+
         </Stack>
+      </Stack>
+
+      <Stack direction="row" gap={4} mt={4}>
+        <Paper sx={{ p: 2, width: 1 }} elevation={6}>
+          <Stack
+            gap={2}
+            width={1}
+            direction="row"
+            alignItems="center"
+            justifyContent="space-between"
+          >
+            <Paper elevation={10} sx={{ width: 1, p: 2 }}>
+              <Typography variant="h2" color="var(--primary-color)">
+                {data.total_nodes}
+              </Typography>
+              <Typography variant="h6">Total Nodes</Typography>
+            </Paper>
+            <Paper elevation={10} sx={{ width: 1, p: 2 }}>
+              <Typography variant="h2" color="var(--primary-color)">
+                {data.previous_flags}
+              </Typography>
+              <Typography variant="h6">Previous Flags</Typography>
+            </Paper>
+          </Stack>
+          <Stack
+            gap={2}
+            width={1}
+            mt={2}
+            direction="row"
+            alignItems="center"
+            justifyContent="space-between"
+          >
+            <Paper elevation={10} sx={{ width: 1, p: 2 }}>
+              <Typography variant="h2" color="var(--primary-color)">
+                {data.builder_projects}
+              </Typography>
+              <Typography variant="h6">Buildings</Typography>
+            </Paper>
+            <Paper elevation={10} sx={{ width: 1, p: 2 }}>
+              <Typography variant="h4" color="var(--primary-color)">
+                {data.complaints}
+              </Typography>
+              <Typography variant="h6">Complaints</Typography>
+            </Paper>
+          </Stack>
+        </Paper>
+        <Paper
+          elevation={3}
+          sx={{
+            width: 1,
+            overflow: "hidden",
+          }}
+        >
+          <Typography variant="h5" sx={{ p: 2 }}>
+            Drone Path
+          </Typography>
+
+          <Box sx={{ height: "calc(100% - 48px)" }}>
+            <MapWithMarkers locations={mapData} />
+          </Box>
+        </Paper>
       </Stack>
     </Box>
   );
