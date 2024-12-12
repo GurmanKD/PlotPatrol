@@ -32,6 +32,9 @@ const theme = createTheme({
     success:{
       main: "#4cbb17",
     },
+    misc2:{
+      main: "#4cbb17",
+    },
     misc: {
       main: "#FFC108", 
     },
