@@ -17,6 +17,8 @@ import {
   Box,
   Collapse,
 } from '@mui/material';
+import config from '../../config';
+import axios from 'axios';
 
 const dummyComplaints = [
   {
@@ -41,7 +43,7 @@ const dummyComplaints = [
 ];
 
 export default function Complaint2() {
-  const [complaints, setComplaints] = React.useState(dummyComplaints);
+  const [complaints, setComplaints] = React.useState([]);
   const [expanded, setExpanded] = React.useState(-1);
   const [selectedImage, setSelectedImage] = React.useState(null);
 
@@ -64,6 +66,46 @@ export default function Complaint2() {
   const handleCloseImageDialog = () => {
     setSelectedImage(null);
   };
+
+
+  const fetchComplaints=async()=>{
+    try {
+
+      const response = await axios.get(config.api.baseUrl+'/complaint/search/' 
+      );
+
+      if (response.status === 200) {
+        setComplaints(response.data)
+      } 
+
+
+    } catch (error) {
+      console.log("Error submitting data.",error);
+    }
+  }
+
+  const handleChange=async(id,res)=>{
+    try {
+
+      const response = await axios.post(config.api.baseUrl+'/complaint/update/',{
+        complaint_id:id,
+        is_approved:res
+      } 
+      );
+
+      if (response.status === 200) {
+        fetchComplaints();
+      } 
+
+    } catch (error) {
+      console.log("Error submitting data.",error);
+    }
+  }
+
+  React.useEffect(()=>{
+    fetchComplaints();
+  },[])
+
 
   return (
     <Box sx={{ padding: 2, borderRadius: 2 }}>
@@ -90,16 +132,35 @@ export default function Complaint2() {
                   }}
                   alignItems="center"
                 >
-                  <Avatar>{complaint.user.name[0]}</Avatar>
-                  <Typography variant="body1" sx={{ flexGrow: 1 }}>
-                    {complaint.user.name}
+                  <Avatar>{complaint.title[0]}</Avatar>
+                  <Typography variant="body1" >
+                    {complaint.title}
                   </Typography>
-
+                  <Box
+                        sx={{
+                          border: "2px solid var(--primary-color)",
+                          borderRadius: 4,
+                          width: "fit-content",
+                          px: 2,
+                          mt: 1,
+                        }}
+                      >
+                        <Typography
+                          textAlign="center"
+                          fontWeight={600}
+                          variant="body2"
+                        >
+                          {complaint.category}
+                        </Typography>
+                      </Box>
+                      <Box sx={{
+                          flexGrow: 1 ,
+                      }}/>
                   <IconButton
                     color="success"
                     size="small"
                     sx={{ border: "2px solid" }}
-                    onClick={() => handleApproval(index)}
+                    onClick={() => handleChange(complaint.id,true) }
                   >
                     <DoneIcon fontSize="inherit" />
                   </IconButton>
@@ -107,7 +168,7 @@ export default function Complaint2() {
                     color="error"
                     size="small"
                     sx={{ border: "2px solid" }}
-                    onClick={() => handleDisapproval(index)}
+                    onClick={() => handleChange(complaint.id,false) }
                   >
                     <CloseIcon fontSize="inherit" />
                   </IconButton>
@@ -127,11 +188,11 @@ export default function Complaint2() {
                       {complaint.description}
                     </Typography>
                     <Typography variant="body1" fontSize="15px" mt={1} color="var(--primary-color)">
-                      {complaint.address}
+                      {complaint.location_name}
                     </Typography>
 
                     <Stack direction="row" spacing={2} mt={2}>
-                      {complaint.attachment.map((url, idx) => (
+                      {Object.values(complaint.images).map((url, idx) => (
                         <img
                           key={idx}
                           src={url}

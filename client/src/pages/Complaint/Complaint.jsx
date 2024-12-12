@@ -1,21 +1,23 @@
-'use client';
-
 import * as React from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import { LoadingButton } from '@mui/lab';
-import { Button, Divider, Paper, Stack, TextField, Typography } from '@mui/material';
+import { Alert, Button, Divider, FormControl, InputLabel, MenuItem, Paper, Select, Snackbar, Stack, TextField, Typography } from '@mui/material';
 import GoogleMapInput from './GoogleMapInput';
 import { Box } from '@mui/system';
+import axios from 'axios';
+import config from '../../config';
+import { uploadImgToCloudinary } from '../../components/Cloudinary';
 
 export default function Complaint() {
   const [complaint, setComplaint] = React.useState({
     description: '',
     attachment: [],
     address: '',
+    title:'',
+    category:'',
     coords: undefined,
   });
 
-  console.log(complaint);
 
   const [files, setFiles] = React.useState([]);
 
@@ -30,13 +32,57 @@ export default function Complaint() {
   };
 
   const handleReset = () => {
-    setComplaint({ description: '', attachment: [], address: '', coords: undefined });
+    setComplaint({ title:'', category:'', description: '', attachment: [], address: '', coords: undefined });
     setFiles([]);
   };
 
   const handleAddressChange = ({ coords, address }) => {
     setComplaint((prev) => ({ ...prev, address, coords }));
   };
+
+  
+  
+  const ResetSnackBar = (event, reason)=> {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSuccess(false);
+  };
+  const [loading,setLoading]=React.useState(false);
+  const [success, setSuccess] = React.useState(false);
+
+  const handleSubmit=async()=>{
+      try {
+        setLoading(true);
+        const newimgs=Object.values(files);
+        const imgs=await uploadImgToCloudinary(newimgs);
+        console.log(imgs);
+
+        const response = await axios.post(config.api.baseUrl+'/complaint/create/', {
+          title:complaint.title,
+          citizen:"123456789012",
+          category:complaint.category,
+          longitude:complaint.coords.lng,
+          latitude:complaint.coords.lat,
+          description:complaint.description,
+          location_name:complaint.address,
+          images:imgs,
+        });
+        setLoading(false);
+
+        if (response.status === 201) {
+          setSuccess(true);
+        }
+  
+  
+      } catch (error) {
+        setLoading(false);
+        console.log("Error submitting data.",error);
+      }
+    
+    
+  }
+
 
   return (
 	<Box sx={{ padding: 2, borderRadius: 2  }}>
@@ -48,7 +94,38 @@ export default function Complaint() {
     <Paper elevation={10} sx={{ padding: 4, width:"100%" }}>
       <Stack spacing={4} >
 
+      <TextField
+		  label="Complaint Name"
+		  variant="outlined"
+      name="title"
+		  sx={{width:"40%",mb:2}}
+			  value={complaint.title}
+		  onChange={handleComplaint}
+		/>
 
+
+      <Divider sx={{borderWidth:"1px", my:2}}/>
+
+      <FormControl>
+
+      <InputLabel id="complaint-select">Complaint Category</InputLabel>
+        <Select
+          labelId="complaint-select"
+          sx={{width:"40%",mb:2}}
+          name='category'
+          value={complaint.category}
+          label="Complaint Category"
+          onChange={handleComplaint}
+          >
+          <MenuItem value={"Unauthorized Construction"}>Unauthorized Construction</MenuItem>
+          <MenuItem value={"Encroachment on Public Property"}>Encroachment on Public Property</MenuItem>
+          <MenuItem value={"Illegal Extensions"}>Illegal Extensions</MenuItem>
+          <MenuItem value={"Unauthorized Shops or Vendors"}>Unauthorized Shops or Vendors</MenuItem>
+        </Select>
+
+          </FormControl>
+
+      <Divider sx={{borderWidth:"1px", my:2}}/>
      
       <Box width={"70%"} sx={{ border: "1px dashed var(--secondary-color)",borderRadius: 2 }}>
         <GoogleMapInput onChange={handleAddressChange} onUseCurrentLocation={undefined} onPlaceSelected={undefined} />
@@ -65,6 +142,8 @@ export default function Complaint() {
         rows={6}
         fullWidth
       />
+
+<Divider sx={{borderWidth:"1px", my:2}}/>
 
 
       <label htmlFor="file-input" style={{alignSelf:"flex-start", display: 'flex', alignItems: 'flex-end' }} id="file-label">
@@ -118,7 +197,9 @@ export default function Complaint() {
         </Button>
         <LoadingButton
           variant="contained"
-          disabled={complaint.description === '' || files.length === 0 || complaint.address === ''}
+          disabled={complaint.description === '' || files.length === 0 || complaint.address === ''|| complaint.title === '' || complaint.category === ''}
+          onClick={handleSubmit}
+          loading={loading}
           sx={{
             fontWeight: 600,
             borderRadius: 1,
@@ -131,6 +212,13 @@ export default function Complaint() {
       </Stack>
 
     </Paper>
+
+    <Snackbar open={success} autoHideDuration={2500} onClose={ResetSnackBar}>
+        <Alert onClose={ResetSnackBar} variant="filled" severity='success'  sx={{ width: '100%' }}>
+          Complaint Registered Successfully
+        </Alert>
+      </Snackbar>
+
 	</Box>
   );
 }

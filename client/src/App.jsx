@@ -6,7 +6,6 @@ import Dashboard from './layouts/Dashboard';
 import SatCompare from './pages/SatCompare/SatCompare';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
-import Complaint from './pages/Complaint/Complaint';
 import Complaint2 from './pages/Complaint/Complaint2';
 import Compare from './pages/SatCompare/Compare';
 import BuilderForm from './pages/BuilderForm/BuilderForm';
@@ -17,6 +16,7 @@ import Surveys from './pages/Surveys/Surveys';
 import Schedule from './pages/Schedule/Schedule';
 import MCD from './pages/MCD/MCD';
 import Report from './pages/Report/Report';
+import Complaint from './pages/Complaint/Complaint';
 
 const theme = createTheme({
   palette: {
