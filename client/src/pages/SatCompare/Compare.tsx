@@ -89,10 +89,7 @@ const Compare = ({node_id=null}) => {
     // Construct the payload for the request
     const payload = {
         node_id: node_id,
-        images: {
-          "0":"https://segment.smartsavaari.in/static/ssim_imageB.jpg",
-          "1":"https://segment.smartsavaari.in/static/ssim_imageA.jpg"
-        }
+        image: "https://segment.smartsavaari.in/static/ssim_imageB.jpg" 
     };
     if(node_id===null)
       return
