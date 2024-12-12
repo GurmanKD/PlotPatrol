@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   CircularProgress,
+  Modal,
   Paper,
   Typography,
 } from "@mui/material";
@@ -17,6 +18,8 @@ import axios from "axios";
 import config from "../../config";
 import MapWithMarkers from "../DronePath/DroneMap";
 import DownloadIcon from "@mui/icons-material/Download"; // Import the desired icon
+import Compare from "../SatCompare/Compare";
+
 
 const modelSize = {
   1: 335,
@@ -466,6 +469,12 @@ const Report = () => {
                         </Box>
                       )}
                     </>
+                  )}
+                
+                  {mode === 3 && (
+                    <Modal>
+                      <Compare node_id={id}/>
+                    </Modal>
                   )}
 
                   {mode === 4 && (
