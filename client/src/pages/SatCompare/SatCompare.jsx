@@ -84,99 +84,101 @@ const SatCompare = () => {
   };
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: '100vh',
-        backgroundColor: '#f5f5f5',
-        padding: 4,
-      }}
-    >
-      <Typography
-        variant='h3'
-        gutterBottom
-        sx={{
-          color: 'primary.main',
-          marginBottom: 4,
-          textAlign: 'center',
-        }}
-      >
-        Satellite Image Timeline
-      </Typography>
-
+    <>
       <Box
         sx={{
-          width: '90%',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          border: '1px solid #ddd',
-          borderRadius: 2,
-          padding: 2,
-          backgroundColor: '#fff',
-          boxShadow: 2,
+          justifyContent: 'center',
+          minHeight: '100vh',
+          backgroundColor: '#f5f5f5',
+          padding: 4,
         }}
       >
+        <Typography
+          variant='h3'
+          gutterBottom
+          sx={{
+            color: 'primary.main',
+            marginBottom: 4,
+            textAlign: 'center',
+          }}
+        >
+          Satellite Image Timeline
+        </Typography>
+
         <Box
           sx={{
-            width: '100%',
-            height: 300,
-            border: '1px solid #ccc',
-            borderRadius: 2,
-            marginBottom: 2,
-            backgroundColor: '#eaeaea',
+            width: '90%',
             display: 'flex',
-            justifyContent: 'center',
+            flexDirection: 'column',
             alignItems: 'center',
+            border: '1px solid #ddd',
+            borderRadius: 2,
+            padding: 2,
+            backgroundColor: '#fff',
+            boxShadow: 2,
           }}
         >
-          <Typography variant='body1' sx={{ color: '#666' }}>
-            Image Container
-          </Typography>
-        </Box>
+          <Box
+            sx={{
+              width: '100%',
+              height: 300,
+              border: '1px solid #ccc',
+              borderRadius: 2,
+              marginBottom: 2,
+              backgroundColor: '#eaeaea',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Typography variant='body1' sx={{ color: '#666' }}>
+              Image Container
+            </Typography>
+          </Box>
 
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            width: '100%',
-            marginBottom: 2,
-          }}
-        >
-          {[1, 2, 3, 4, 5].map((number) => (
-            <Button
-              key={number}
-              variant='outlined'
-              sx={{ flex: 1, margin: '0 4px' }}
-            >
-              {number}
-            </Button>
-          ))}
-        </Box>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              width: '100%',
+              marginBottom: 2,
+            }}
+          >
+            {[1, 2, 3, 4, 5].map((number) => (
+              <Button
+                key={number}
+                variant='outlined'
+                sx={{ flex: 1, margin: '0 4px' }}
+              >
+                {number}
+              </Button>
+            ))}
+          </Box>
 
-        <Button
-          variant='contained'
-          color='primary'
-          onClick={handleOpen}
-          sx={{ width: '100%', marginTop: 2 }}
-        >
-          Show Flag
-        </Button>
-      </Box>
-
-      <Dialog open={open} onClose={handleClose} fullWidth maxWidth='lg'>
-        <DialogContent>
-          <Compare />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color='primary'>
-            Close
+          <Button
+            variant='contained'
+            color='primary'
+            onClick={handleOpen}
+            sx={{ width: '100%', marginTop: 2 }}
+          >
+            Show Flag
           </Button>
-        </DialogActions>
-      </Dialog>
+        </Box>
+
+        <Dialog open={open} onClose={handleClose} fullWidth maxWidth='lg'>
+          <DialogContent>
+            <Compare />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color='primary'>
+              Close
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Box>
 
       <MapAreaLock />
 
@@ -413,7 +415,7 @@ const SatCompare = () => {
           </Dialog>
         )}
       </Box>
-    </Box>
+    </>
   );
 };
 
