@@ -209,6 +209,7 @@ const MapAreaLock = () => {
       return;
     }
 
+	console.log(google.maps);
     const service = new window.google.maps.places.PlacesService(map);
     const placeTypes = ["school", "hospital", "industrial"];
     const newPlaces = { schools: [], hospitals: [], industries: [] };

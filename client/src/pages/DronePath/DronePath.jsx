@@ -216,54 +216,7 @@ const DronePath = () => {
           - {pincode}
         </span>
       </Typography>
-      <Box
-        sx={{
-          display: "flex",
-          gap: 2,
-          width: "100%",
-          height: "35vh",
-        }}
-      >
-        {/* Left Section - Video Stream */}
-        <Paper
-          elevation={3}
-          sx={{
-            width: "43%",
-            height: "100%",
-            overflow: "hidden",
-          }}
-        >
-          <Typography variant="h5" sx={{ p: 2 }}>
-            Drone Footage
-          </Typography>
-          <Box
-            component="iframe"
-            sx={{
-              width: "100%",
-              height: "calc(100% - 48px)", // Subtract header height
-              border: "none",
-            }}
-            src="rtsp://192.168.1.1:7070/webcam.sdp"
-          />
-        </Paper>
-
-        {/* Right Section - Map */}
-        <Paper
-          elevation={3}
-          sx={{
-            width: "55%",
-            height: "100%",
-            overflow: "hidden",
-          }}
-        >
-          <Typography variant="h5" sx={{ p: 2 }}>
-            Drone Path
-          </Typography>
-          <Box sx={{ height: "calc(100% - 48px)" }}>
-            <MapWithMarkers locations={locations}/>
-          </Box>
-        </Paper>
-      </Box>
+     
 
       <Stack direction="row" gap={4} alignItems="stretch" mt={5}>
         <Paper elevation={6} sx={{ p: 2, width: 1, background: "#f5f5f5" }}>
@@ -502,6 +455,57 @@ const DronePath = () => {
           </Stack>
         </Paper>
       </Stack>
+
+      <Box
+        sx={{
+          display: "flex",
+          gap: 2,
+          width: "100%",
+          height: "35vh",
+          mt:4,
+        }}
+      >
+        {/* Left Section - Video Stream */}
+        <Paper
+          elevation={3}
+          sx={{
+            width: "43%",
+            height: "100%",
+            overflow: "hidden",
+          }}
+        >
+          <Typography variant="h5" sx={{ p: 2 }}>
+            Drone Footage
+          </Typography>
+          <Box
+            component="iframe"
+            sx={{
+              width: "100%",
+              height: "calc(100% - 48px)", // Subtract header height
+              border: "none",
+            }}
+            src="rtsp://192.168.1.1:7070/webcam.sdp"
+          />
+        </Paper>
+
+        {/* Right Section - Map */}
+        <Paper
+          elevation={3}
+          sx={{
+            width: "55%",
+            height: "100%",
+            overflow: "hidden",
+          }}
+        >
+          <Typography variant="h5" sx={{ p: 2 }}>
+            Drone Path
+          </Typography>
+          <Box sx={{ height: "calc(100% - 48px)" }}>
+            <MapWithMarkers locations={locations}/>
+          </Box>
+        </Paper>
+      </Box>
+
     </Box>
   );
 };
