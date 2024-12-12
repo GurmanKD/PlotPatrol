@@ -13,7 +13,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { getPlacesInPincode } from "./PinCodePlaces";
 import axios from "axios";
 import config from "../../config";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const DronePath = () => {
   const params = useParams();
@@ -23,6 +23,8 @@ const DronePath = () => {
   // 1--> Buildings (Registered by builders)
   // 2--> Complaints
   // 3--> Places
+
+  const navigate=useNavigate();
 
   const [data, setData] = useState({
     1: [],
@@ -114,6 +116,9 @@ const DronePath = () => {
       );
 
       if (res.status === 200) {
+        if(res.data.is_path_finalized){
+          navigate('/survey/report/'+id);
+        }
         setPincode(res.data.area_pincode);
       }
     } catch (error) {
