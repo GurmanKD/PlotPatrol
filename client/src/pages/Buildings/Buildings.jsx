@@ -53,7 +53,6 @@ const MapComponent = ({ onMapLoad, onClick, center, zoom, marker }) => {
     }
   }, [ref, map, onMapLoad, onClick, center, zoom]);
 
-  // Update map center and zoom when they change
   React.useEffect(() => {
     if (map && center) {
       map.setCenter(center);
@@ -61,7 +60,6 @@ const MapComponent = ({ onMapLoad, onClick, center, zoom, marker }) => {
     }
   }, [map, center, zoom]);
 
-  // Update marker when it changes
   React.useEffect(() => {
     if (map && marker) {
       new window.google.maps.Marker({
@@ -162,7 +160,7 @@ const MapAreaLock = () => {
       `size=800x600&` +
       `maptype=satellite&` +
       `path=color:0x1976d2|weight:3|${pathPoints}&` +
-      `key=AIzaSyAbclwHdrmNLwoUpd-6qTiD8uF6-95gxxc`
+      `key=AIzaSyAbclwHdrmNLwoUpd-6qTiD8uF6-95gxxc&libraries=places`
     );
   };
 
