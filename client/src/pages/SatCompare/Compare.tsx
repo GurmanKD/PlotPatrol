@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { Box, Button, CircularProgress, Typography, IconButton, Stack, Modal } from '@mui/material';
 import { Upload } from '@mui/icons-material';
 
-const Compare = () => {
+const Compare = ({node_id=null}) => {
   const [image1, setImage1] = useState(null);
   const [image2, setImage2] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -39,7 +39,7 @@ const Compare = () => {
     formData.append('file', file);
 
     try {
-      const response = await fetch('http://172.16.17.219:5500/uploadImage', {
+      const response = await fetch('https://segment.smartsavaari.in/uploadImage', {
         method: 'POST',
         body: formData,
       });
@@ -63,14 +63,18 @@ const Compare = () => {
 
       if (uploadedImage1 && uploadedImage2) {
         console.log('Images uploaded:', uploadedImage1, uploadedImage2);
-        const response = await fetch('http://172.16.17.219:5500/runTest', {
+        const response = await fetch('https://segment.smartsavaari.in/runTest', {
           method: 'POST',
         });
 
         const data = await response.json();
    
           console.log(data)
-          setFinalResult(data.link); // Use the URL from the response
+          if(data.flag){
+            postNodeData(node_id)
+          }
+          let d="https://segment.smartsavaari.in/static/ssim_imageB.jpg";
+          setFinalResult(d); // Use the URL from the response
           setOpenModal(true); // Open the modal to show the image
         
       }
@@ -78,6 +82,48 @@ const Compare = () => {
       setLoading(false);
     }
   };
+
+
+  async function postNodeData(node_id) {
+    const apiEndpoint = "https://pancham.smartsavaari.in/inspection/update-node/";
+    // Construct the payload for the request
+    const payload = {
+        node_id: node_id,
+        images: {
+          "0":"https://segment.smartsavaari.in/static/ssim_imageB.jpg",
+          "1":"https://segment.smartsavaari.in/static/ssim_imageA.jpg"
+        }
+    };
+    if(node_id===null)
+      return
+    // Add image links to the payload
+  
+    try {
+        // Send POST request
+        const response = await fetch(apiEndpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+
+        // Handle the response
+        if (!response.ok) {
+            throw new Error(`Server returned ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log("Success:", result);
+        return result;
+
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+// Example usage:
+
 
   const handleCloseModal = () => {
     setOpenModal(false);
@@ -147,7 +193,7 @@ const Compare = () => {
       <Button variant="contained" sx={{ mt: 5 }} onClick={handleProceed} disabled={loading}>
         {loading ? <CircularProgress size={24} /> : 'Compare'}
       </Button>
-      <img src={finalResult} alt="Result" style={{ width: '100%' }} />
+      {/* <img src={finalResult} alt="Result" style={{ width: '100%' }} /> */}
       <Modal open={openModal} onClose={handleCloseModal}>
         <Box
           sx={{

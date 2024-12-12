@@ -38,11 +38,34 @@ const Report = () => {
 
       if (res.status === 200) {
         setData(res.data);
+        console.log(
+          res.data
+        )
+
       }
     } catch (error) {
       console.error(error);
     }
   };
+
+  const fetchMapData = async () => {
+    try {
+      const res = await axios.get(
+        config.api.baseUrl + "/inspection/fetch-coords/" + id
+      );
+
+      if (res.status === 200) {
+        setMapData(res.data);
+        console.log(
+          res.data
+        )
+
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const fetchNodeData = async () => {
     try {
       const res = await axios.post(
@@ -67,10 +90,11 @@ const Report = () => {
 
   const [nodeIdx, setNodeIdx] = useState(-1);
   const [nodeData, setNodeData] = useState([]);
-
+  const [mapData,setMapData]=useState([]);
   useEffect(() => {
     if (nodeIdx !== -1) {
       fetchNodeData();
+     
     }
   }, [nodeIdx]);
 
@@ -136,6 +160,7 @@ const Report = () => {
 
   useEffect(() => {
     fetchInitialData();
+    fetchMapData();
   }, []);
 
   return (
@@ -203,7 +228,7 @@ const Report = () => {
             Drone Path
           </Typography>
           <Box sx={{ height: "calc(100% - 48px)" }}>
-            <MapWithMarkers locations={[]}/>
+            <MapWithMarkers locations={mapData}/>
           </Box>
         </Paper>
       </Stack>
