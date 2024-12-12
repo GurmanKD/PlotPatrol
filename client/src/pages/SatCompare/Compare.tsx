@@ -1,17 +1,13 @@
 import React, { useRef, useState } from 'react';
-import { Box, Button, CircularProgress, Typography, IconButton, Stack } from '@mui/material';
+import { Box, Button, CircularProgress, Typography, IconButton, Stack, Modal } from '@mui/material';
 import { Upload } from '@mui/icons-material';
 
 const Compare = () => {
   const [image1, setImage1] = useState(null);
   const [image2, setImage2] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [apiResult, setApiResult] = useState(null);
-  const [dragging1, setDragging1] = useState(false);
-  const [dragging2, setDragging2] = useState(false);
-
-
-const [finalResult, setFinalResult] = useState("https://i.pinimg.com/736x/a2/a3/97/a2a397e610d4a4573ec212fb8420044d.jpg");
+  const [finalResult, setFinalResult] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
 
   const fileInput1 = useRef(null);
   const fileInput2 = useRef(null);
@@ -38,53 +34,52 @@ const [finalResult, setFinalResult] = useState("https://i.pinimg.com/736x/a2/a3/
     }
   };
 
-  const handleDragEnter1 = (e) => {
-    e.preventDefault();
-    setDragging1(true);
-  };
+  const uploadToBackend = async (file) => {
+    const formData = new FormData();
+    formData.append('file', file);
 
-  const handleDragLeave1 = (e) => {
-    e.preventDefault();
-    setDragging1(false);
-  };
-
-  const handleDrop1 = (e) => {
-    e.preventDefault();
-    setDragging1(false);
-    const file = e.dataTransfer.files[0];
-    if (file && file.type.startsWith('image/')) {
-      handleImageUpload(file, setImage1);
+    try {
+      const response = await fetch('http://172.16.17.219:5500/uploadImage', {
+        method: 'POST',
+        body: formData,
+      });
+      return true;
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      return null;
     }
   };
 
-  const handleDragEnter2 = (e) => {
-    e.preventDefault();
-    setDragging2(true);
-  };
-
-  const handleDragLeave2 = (e) => {
-    e.preventDefault();
-    setDragging2(false);
-  };
-
-  const handleDrop2 = (e) => {
-    e.preventDefault();
-    setDragging2(false);
-    const file = e.dataTransfer.files[0];
-    if (file && file.type.startsWith('image/')) {
-      handleImageUpload(file, setImage2);
-    }
-  };
-
-  const handleProceed = () => {
+  const handleProceed = async () => {
     if (!image1 || !image2) return;
 
     setLoading(true);
-    setApiResult(null);
+    try {
+      const file1 = fileInput1.current.files[0];
+      const file2 = fileInput2.current.files[0];
 
-    setTimeout(() => {
+      const uploadedImage1 = await uploadToBackend(file1);
+      const uploadedImage2 = await uploadToBackend(file2);
+
+      if (uploadedImage1 && uploadedImage2) {
+        console.log('Images uploaded:', uploadedImage1, uploadedImage2);
+        const response = await fetch('http://172.16.17.219:5500/runTest', {
+          method: 'POST',
+        });
+
+        const data = await response.json();
+        if (data.success) {
+          setFinalResult(data.link); // Use the URL from the response
+          setOpenModal(true); // Open the modal to show the image
+        }
+      }
+    } finally {
       setLoading(false);
-    }, 180000);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
   };
 
   return (
@@ -97,139 +92,85 @@ const [finalResult, setFinalResult] = useState("https://i.pinimg.com/736x/a2/a3/
       </Typography>
 
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mt: 8 }}>
+        {/* Image 1 Upload */}
         <Box
-          onDragEnter={handleDragEnter1}
-          onDragLeave={handleDragLeave1}
-          onDragOver={(e) => e.preventDefault()}
-          onDrop={handleDrop1}
           sx={{
             border: '2px dashed var(--primary-color)',
             padding: 2,
+            width: 300,
+            height: 300,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            width: 300,
-            height: 300,
-            background: image1 ? 'none' : dragging1 ? '#e0e0e0' : '#f5f5f5',
             borderRadius: 2,
             cursor: 'pointer',
           }}
         >
+          <input type="file" ref={fileInput1} onChange={handleFileChange1} hidden />
           {image1 ? (
-            <img src={image1} alt="Image 1" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+            <img src={image1} alt="Image 1" style={{ width: '100%', height: '100%' }} />
           ) : (
-            <>
-              <IconButton color="primary" component="span" onClick={() => fileInput1.current.click()}>
-                <Upload />
-              </IconButton>
-              <Typography textAlign="center" variant="body2">
-                Drag and Drop or Upload Image 1
-              </Typography>
-              <input
-                type="file"
-                accept="image/*"
-                style={{ display: 'none' }}
-                ref={fileInput1}
-                onChange={handleFileChange1}
-              />
-            </>
+            <IconButton onClick={() => fileInput1.current.click()}>
+              <Upload />
+            </IconButton>
           )}
         </Box>
 
-        <Typography variant="h5">+</Typography>
-
+        {/* Image 2 Upload */}
         <Box
-          onDragEnter={handleDragEnter2}
-          onDragLeave={handleDragLeave2}
-          onDragOver={(e) => e.preventDefault()}
-          onDrop={handleDrop2}
           sx={{
             border: '2px dashed var(--primary-color)',
             padding: 2,
+            width: 300,
+            height: 300,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            width: 300,
-            height: 300,
-            background: image2 ? 'none' : dragging2 ? '#e0e0e0' : '#f5f5f5',
             borderRadius: 2,
             cursor: 'pointer',
           }}
         >
+          <input type="file" ref={fileInput2} onChange={handleFileChange2} hidden />
           {image2 ? (
-            <img src={image2} alt="Image 2" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+            <img src={image2} alt="Image 2" style={{ width: '100%', height: '100%' }} />
           ) : (
-            <>
-              <IconButton color="primary" component="span" onClick={() => fileInput2.current.click()}>
-                <Upload />
-              </IconButton>
-              <Typography textAlign="center" variant="body2">
-                Drag and Drop or Upload Image 2
-              </Typography>
-              <input
-                type="file"
-                accept="image/*"
-                style={{ display: 'none' }}
-                ref={fileInput2}
-                onChange={handleFileChange2}
-              />
-            </>
+            <IconButton onClick={() => fileInput2.current.click()}>
+              <Upload />
+            </IconButton>
           )}
         </Box>
       </Box>
-		{!apiResult &&(
 
-			<Button
-			variant="contained"
-			color="primary"
-			onClick={handleProceed}
-			disabled={!image1 || !image2 || loading}
-			sx={{ mt: 5, fontSize: '18px', borderRadius: 2, width: '20%' }}
-			>
-        {loading ? 'Processing...' : 'Proceed'}
+      <Button variant="contained" sx={{ mt: 5 }} onClick={handleProceed} disabled={loading}>
+        {loading ? <CircularProgress size={24} /> : 'Compare'}
       </Button>
-	)}
 
-
-		  {(loading||apiResult)&&(
-			<>
-			  <Box sx={{display:'flex',justifyContent:'center',marginTop:1}}>
-					<Typography variant="h1" fontSize="104px" color="var(--primary-color)">
-							&#8595;
-					</Typography>
-			  </Box>
-
-
+      <Modal open={openModal} onClose={handleCloseModal}>
         <Box
-		sx={{
-			border: '2px dashed var(--primary-color)',
-			padding: 2,
-			display: 'flex',
-			flexDirection: 'column',
-			alignItems: 'center',
-			justifyContent: 'center',
-			width: 500,
-			height: 500,
-			mt:6,
-			mb:6,
-		  background: image2 ? 'none' : loading ? '#e0e0e0' : '#f5f5f5',
-		  borderRadius: 2,
-		  cursor: 'pointer',
-		}}
-		>
-		{loading && (
-          <CircularProgress />
-		)}
-		{apiResult && (
-            <img src={finalResult} alt="Image 2" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-          ) }
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 600,
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 2,
+            textAlign: 'center',
+          }}
+        >
+          <Typography variant="h6" sx={{ mb: 2 }}>
+            Comparison Result
+          </Typography>
+          {finalResult && <img src={finalResult} alt="Result" style={{ width: '100%' }} />}
+          <Button variant="contained" sx={{ mt: 3 }} onClick={handleCloseModal}>
+            Close
+          </Button>
         </Box>
-		</>
-
-		  )}
-
+      </Modal>
     </Stack>
   );
 };

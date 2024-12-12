@@ -14,6 +14,7 @@ import { getPlacesInPincode } from "./PinCodePlaces";
 import axios from "axios";
 import config from "../../config";
 import { useNavigate, useParams } from "react-router-dom";
+import MapWithMarkers from "./DroneMap";
 
 const DronePath = () => {
   const params = useParams();
@@ -103,6 +104,7 @@ const DronePath = () => {
         }));
         console.log(data[3]);
         setNodeList(data[3]);
+        setLocations(nodeList);
       }
     } catch (error) {
       console.error(error);
@@ -144,8 +146,10 @@ const DronePath = () => {
       );
 
       if (res.status === 200) {
+
         fetchInitialData();
         fetchPlaces();
+        setLocations([...locations, { lat: res.data.lat, lng: res.data.lng }]);
       }
     } catch (error) {
       console.error(error);
@@ -165,10 +169,19 @@ const DronePath = () => {
       if (res.status === 200) {
         fetchInitialData();
         fetchPlaces();
+        removeLocation(res.data)
       }
     } catch (error) {
       console.error(error);
     }
+  };
+  const [locations, setLocations] = useState(nodeList);
+
+
+
+  const removeLocation = ({ lat, lng }) => {
+    const newLocations = locations.filter(location => !(location.lat === lat && location.lng === lng));
+    setLocations(newLocations);
   };
 
   return (
@@ -224,7 +237,7 @@ const DronePath = () => {
             Drone Path
           </Typography>
           <Box sx={{ height: "calc(100% - 48px)" }}>
-            <PincodeMap pincode="110081" />
+            <MapWithMarkers locations={locations}/>
           </Box>
         </Paper>
       </Box>
