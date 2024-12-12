@@ -85,6 +85,7 @@ const DronePath = () => {
     }
   };
 
+
   const fetchInitialData = async () => {
     try {
       const res = await axios.post(
@@ -183,6 +184,28 @@ const DronePath = () => {
     const newLocations = locations.filter(location => !(location.lat === lat && location.lng === lng));
     setLocations(newLocations);
   };
+
+
+  const [loading,setLoading]=useState(false);
+  const handleLockButton=async()=>{
+    try {
+      setLoading(true);
+      const res = await axios.post(
+        config.api.baseUrl + "/inspection/finalize-path/",
+        {
+        inspection_id: id,
+        }
+      );
+      setLoading(false);
+  
+      if (res.status === 200) {
+        navigate("/survey-report"+id);
+      }
+      } catch (error) {
+      setLoading(false);
+      console.error(error);
+      }
+    }
 
   return (
     <Box p={2}>
@@ -472,7 +495,7 @@ const DronePath = () => {
               )}
             </Stack>
             
-            <Button variant="contained" color="misc" sx={{color:"white",height:"40.1vh",width:0.2,borderRadius:1,mt:2,fontWeight:600, fontSize:"22px"}}>
+            <Button variant="contained" color="misc" sx={{color:"white",height:"40.1vh",width:0.2,borderRadius:1,mt:2,fontWeight:600, fontSize:"22px"}} disabled={loading} onClick={handleLockButton}>
               Lock<br/>Path
             </Button>
 

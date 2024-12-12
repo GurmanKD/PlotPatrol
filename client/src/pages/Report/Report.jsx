@@ -71,40 +71,50 @@ const Report = () => {
     }
   }, [nodeIdx]);
 
-  const handleOverallReport=async()=>{
-	try {
-		const res = await axios.post(
-		  config.api.baseUrl + "/inspection/download-report/",
-		  {
-			inspection_id: id,
-		  }
-		);
-  
-		if (res.status === 200) {
-		  const url=res.data.download_url;
-		}
-	  } catch (error) {
-		console.error(error);
-	  }
-  }
+  const [loading, setLoading] = useState(false);
 
-  const handleNodalReport=async()=>{
-	try {
-		const res = await axios.post(
-		  config.api.baseUrl + "/inspection/download-node-report/",
-		  {
-			node_id: data.nodes[nodeIdx].id,
-			inspection_id: id,
-		  }
-		);
-  
-		if (res.status === 200) {
-			const url=res.data.download_url;
-		}
-	  } catch (error) {
-		console.error(error);
-	  }
-  }
+  const handleOverallReport = async () => {
+    try {
+      setLoading(true);
+      const res = await axios.post(
+        config.api.baseUrl + "/inspection/download-report/",
+        {
+          inspection_id: id,
+        }
+      );
+      setLoading(false);
+
+      if (res.status === 200) {
+        const url = res.data.download_url;
+        window.open(url, "_blank");
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error(error);
+    }
+  };
+
+  const handleNodalReport = async () => {
+    try {
+      setLoading(true);
+      const res = await axios.post(
+        config.api.baseUrl + "/inspection/download-node-report/",
+        {
+          node_id: data.nodes[nodeIdx].id,
+          inspection_id: id,
+        }
+      );
+      setLoading(false);
+
+      if (res.status === 200) {
+        const url = res.data.download_url;
+        window.open(url, "_blank");
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error(error);
+    }
+  };
 
   const currStage = 3;
   const [stageNum, setStageNum] = useState(currStage);
@@ -371,9 +381,12 @@ const Report = () => {
                 >
                   {mode === 1 && (
                     <Box>
-                      {!nodeData[stageNum-1]?.images ||
-                      Object.values(nodeData[stageNum-1]?.images).length === 0 ? (
-                        <Typography textAlign="center" mt={18}>No images available</Typography>
+                      {!nodeData[stageNum - 1]?.images ||
+                      Object.values(nodeData[stageNum - 1]?.images).length ===
+                        0 ? (
+                        <Typography textAlign="center" mt={18}>
+                          No images available
+                        </Typography>
                       ) : (
                         <Carousel
                           strictIndexing
@@ -387,7 +400,7 @@ const Report = () => {
                             height: "100%",
                           }}
                         >
-                          {Object.values(nodeData[stageNum-1]?.images).map(
+                          {Object.values(nodeData[stageNum - 1]?.images).map(
                             (val) => (
                               <Stack
                                 key={val}
@@ -427,8 +440,8 @@ const Report = () => {
                         <GoogleMap
                           mapContainerStyle={{ width: "100%", height: "100%" }}
                           center={{
-                            lat: nodeData[stageNum-1]?.latitude,
-                            lng: nodeData[stageNum-1]?.longitude,
+                            lat: nodeData[stageNum - 1]?.latitude,
+                            lng: nodeData[stageNum - 1]?.longitude,
                           }}
                           zoom={15}
                           options={{
@@ -437,10 +450,12 @@ const Report = () => {
                             zoomControl: true,
                           }}
                         >
-                          <Marker position={{
-                            lat: nodeData[stageNum-1]?.latitude,
-                            lng: nodeData[stageNum-1]?.longitude,
-                          }} />
+                          <Marker
+                            position={{
+                              lat: nodeData[stageNum - 1]?.latitude,
+                              lng: nodeData[stageNum - 1]?.longitude,
+                            }}
+                          />
                         </GoogleMap>
                       ) : loadError ? (
                         <Typography
@@ -467,53 +482,87 @@ const Report = () => {
 
                   {mode === 4 && (
                     <Box height={1}>
-                      <Model stage={stageNum-1} size={modelSize[stageNum-1]} />
+                      <Model
+                        stage={stageNum - 1}
+                        size={modelSize[stageNum - 1]}
+                      />
                     </Box>
                   )}
                 </Box>
               </Stack>
             </Box>
           )}
-		  
         </Paper>
 
-		  <Stack justifyContent="center">
-
-		  <Box
+        <Stack justifyContent="center">
+          <Box
             sx={{
               width: 1,
-			  border:"2px solid",
-              borderColor:
-                nodeData[0].is_flagged ? "var(--error-home)" : "var(--success)",
-                color:nodeData[0].is_flagged ? "var(--error-home)" : "var(--success)",
+              border: "2px solid",
+              borderColor: nodeIdx!==-1? nodeData[0]?.is_flagged
+                ? "var(--error-home)"
+                : "var(--success)":"var(--primary-color)",
+              color: nodeIdx!==-1? nodeData[0]?.is_flagged
+			  ? "var(--error-home)"
+			  : "var(--success)":"var(--primary-color)",
               borderRadius: 2,
               px: 2,
               py: 1,
-			  my:2
+              my: 2,
             }}
-              >
-                <Typography textAlign="center" variant="h6" >
+          >
+            {nodeIdx === -1 ? (
+              <Typography textAlign="center" variant="h6">
+			  Select a node
+			</Typography>
+            ) : (
+              <>
+                <Typography textAlign="center" variant="h6">
                   Status
                 </Typography>
 
-                <Typography textAlign="center" variant="body1" >
-                  {
-                nodeData[0].is_flagged ? "Flagged" : "UnFlagged"
-				  }
+                <Typography textAlign="center" variant="body1">
+                  {nodeData[0]?.is_flagged ? "Flagged" : "UnFlagged"}
                 </Typography>
-              </Box>
+              </>
+            )}
+          </Box>
 
-		
-		<Button variant="contained" color="misc" sx={{color:"white",width:1,borderRadius:1,fontWeight:600, fontSize:"18px",my:2}} disabled={nodeIdx===-1} onClick={handleNodalReport}>
-              Download Nodal<br/> Report
-            </Button>
-	
-		<Button variant="contained" color="success" sx={{color:"white",width:1,borderRadius:1,fontWeight:600, fontSize:"18px",my:2}} onClick={handleOverallReport}>
-              Download Overall Report
-            </Button>
-	
-		</Stack>
+          <Button
+            variant="contained"
+            color="misc"
+            sx={{
+              color: "white",
+              width: 1,
+              borderRadius: 1,
+              fontWeight: 600,
+              fontSize: "18px",
+              my: 2,
+            }}
+            disabled={nodeIdx === -1 || loading}
+            onClick={handleNodalReport}
+          >
+            Download Nodal
+            <br /> Report
+          </Button>
 
+          <Button
+            variant="contained"
+            color="success"
+            sx={{
+              color: "white",
+              width: 1,
+              borderRadius: 1,
+              fontWeight: 600,
+              fontSize: "18px",
+              my: 2,
+            }}
+            onClick={handleOverallReport}
+            disabled={loading}
+          >
+            Download Overall Report
+          </Button>
+        </Stack>
       </Stack>
     </Box>
   );
