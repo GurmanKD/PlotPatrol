@@ -1,6 +1,6 @@
 const config={
 	api:{
-		baseUrl:'http://172.16.17.229:5673',
+		baseUrl:'https://pancham.smartsavaari.in',
 	},
 	cloudinary:{
 		cloudName:'dnzgifrcv',
