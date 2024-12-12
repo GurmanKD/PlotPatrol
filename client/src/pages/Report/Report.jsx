@@ -37,7 +37,7 @@ const Report = () => {
       const res = await axios.get(
         config.api.baseUrl + "/inspection/fetch/" + id
       );
-
+	  
       if (res.status === 200) {
         setData(res.data);
         console.log(res.data);
@@ -372,8 +372,8 @@ const Report = () => {
                 >
                   {mode === 1 && (
                     <Box>
-                      {!nodeData[stageNum - 1]?.images ||
-                      Object.values(nodeData[stageNum - 1]?.images).length ===
+                      {!nodeData[stageNum - 1]?.drone_image ||
+                      Object.values(nodeData[stageNum - 1]?.drone_image).length ===
                         0 ? (
                         <Typography textAlign="center" mt={18}>
                           No images available
@@ -391,7 +391,7 @@ const Report = () => {
                             height: "100%",
                           }}
                         >
-                          {Object.values(nodeData[stageNum - 1]?.images).map(
+                          {Object.values(nodeData[stageNum - 1]?.drone_image).map(
                             (val) => (
                               <Stack
                                 key={val}
@@ -425,52 +425,117 @@ const Report = () => {
                     </Box>
                   )}
 
-                  {mode === 2 && (
-                    <>
-                      {isLoaded ? (
-                        <GoogleMap
-                          mapContainerStyle={{ width: "100%", height: "100%" }}
-                          center={{
-                            lat: nodeData[stageNum - 1]?.latitude,
-                            lng: nodeData[stageNum - 1]?.longitude,
-                          }}
-                          zoom={15}
-                          options={{
-                            mapTypeId: "satellite",
-                            disableDefaultUI: true,
-                            zoomControl: true,
-                          }}
-                        >
-                          <Marker
-                            position={{
-                              lat: nodeData[stageNum - 1]?.latitude,
-                              lng: nodeData[stageNum - 1]?.longitude,
-                            }}
-                          />
-                        </GoogleMap>
-                      ) : loadError ? (
-                        <Typography
-                          variant="body1"
-                          color="error"
-                          align="center"
-                        >
-                          Failed to load map. Please try again.
+{mode === 2 && (
+                    <Box>
+                      {!nodeData[stageNum - 1]?.satellite_image ||
+                      Object.values(nodeData[stageNum - 1]?.satellite_image).length ===
+                        0 ? (
+                        <Typography textAlign="center" mt={18}>
+                          No images available
                         </Typography>
                       ) : (
-                        <Box
+                        <Carousel
+                          strictIndexing
+                          autoPlay={false}
+                          cycleNavigation={false}
+                          animation="slide"
+                          navButtonsAlwaysVisible
+                          interval={5000}
                           sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
+                            width: 1,
                             height: "100%",
                           }}
                         >
-                          <CircularProgress color="primary" />
-                        </Box>
+                          {Object.values(nodeData[stageNum - 1]?.satellite_image).map(
+                            (val) => (
+                              <Stack
+                                key={val}
+                                sx={{
+                                  width: 1,
+                                  height: 1,
+                                  bgcolor: "#f5f5f5",
+                                  position: "relative",
+                                  overflow: "hidden",
+                                }}
+                                alignItems="center"
+                                justifyContent="center"
+                              >
+                                <img
+                                  src={val}
+                                  alt="drone"
+                                  style={{
+                                    maxHeight: "32vh",
+                                    width: "auto",
+                                    objectFit: "contain",
+                                    backgroundColor: "#f5f5f5",
+                                    display: "block",
+                                    margin: "0 auto",
+                                  }}
+                                />
+                              </Stack>
+                            )
+                          )}
+                        </Carousel>
                       )}
-                    </>
+                    </Box>
                   )}
-                
+
+				  {mode === 3 && (
+						<Box>
+						  {!nodeData[stageNum - 1]?.comparison_image ||
+						  Object.values(nodeData[stageNum - 1]?.comparison_image).length ===
+							0 ? (
+							<Typography textAlign="center" mt={18}>
+							  No images available
+							</Typography>
+						  ) : (
+							<Carousel
+							  strictIndexing
+							  autoPlay={false}
+							  cycleNavigation={false}
+							  animation="slide"
+							  navButtonsAlwaysVisible
+							  interval={5000}
+							  sx={{
+								width: 1,
+								height: "100%",
+							  }}
+							>
+							  {Object.values(nodeData[stageNum - 1]?.comparison_image).map(
+								(val) => (
+								  <Stack
+									key={val}
+									sx={{
+									  width: 1,
+									  height: 1,
+									  bgcolor: "#f5f5f5",
+									  position: "relative",
+									  overflow: "hidden",
+									}}
+									alignItems="center"
+									justifyContent="center"
+								  >
+									<img
+									  src={val}
+									  alt="drone"
+									  style={{
+										maxHeight: "32vh",
+										width: "auto",
+										objectFit: "contain",
+										backgroundColor: "#f5f5f5",
+										display: "block",
+										margin: "0 auto",
+									  }}
+									/>
+								  </Stack>
+								)
+							  )}
+							</Carousel>
+						  )}
+						</Box>
+	
+				  )}
+
                   {mode === 3 && (
                     <Modal>
                       <Compare node_id={id}/>
