@@ -119,7 +119,7 @@ const DronePath = () => {
 
       if (res.status === 200) {
         if(res.data.is_path_finalized){
-          navigate('/survey/report/'+id);
+          navigate('/survey-report/'+id);
         }
         setPincode(res.data.area_pincode);
       }
@@ -188,7 +188,7 @@ const DronePath = () => {
     <Box p={2}>
       <Typography variant="h3" sx={{ fontWeight: 600, mb: 2 }} color="primary">
         Drone Paths Survey{" "}
-        <span style={{ color: "black", fontWeight: 500, fontSize: "24px" }}>
+        <span style={{ color: "black", fontWeight: 500, fontSize: "36px" }}>
           {" "}
           - {pincode}
         </span>

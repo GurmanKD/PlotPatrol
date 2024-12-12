@@ -16,7 +16,7 @@ import DronePath from './pages/DronePath/DronePath';
 import Surveys from './pages/Surveys/Surveys';
 import Schedule from './pages/Schedule/Schedule';
 import MCD from './pages/MCD/MCD';
-import DroneMap from './pages/DronePath/DroneMap';
+import Report from './pages/Report/Report';
 
 const theme = createTheme({
   palette: {
@@ -101,7 +101,8 @@ function App() {
             <Route path="/sat-compare" element={<Protected element={<Dashboard element={<SatCompare />} />} />}></Route>
             <Route path="/drone-path/:id" element={<Protected element={<Dashboard element={<DronePath />} />} />}></Route>
             <Route path="/survey" element={<Protected element={<Dashboard element={<Surveys />} />} />}></Route>
-            <Route path="/test" element={<Protected element={<Dashboard element={<DroneMap />} />} />}></Route>
+            <Route path="/survey-report/:id" element={<Protected element={<Dashboard element={<Report />} />} />}></Route>
+            <Route path="/test" element={<Protected element={<Dashboard element={<GoogleMapInput />} />} />}></Route>
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
