@@ -15,6 +15,7 @@ import Carousel from "react-material-ui-carousel";
 import Model from "../../components/model";
 import axios from "axios";
 import config from "../../config";
+import MapWithMarkers from "../DronePath/DroneMap";
 
 const modelSize = {
   1: 335,
@@ -24,6 +25,8 @@ const modelSize = {
 };
 
 const Report = () => {
+
+	
   const params = useParams();
   const id = params.id;
 
@@ -86,6 +89,7 @@ const Report = () => {
 
       if (res.status === 200) {
         const url = res.data.download_url;
+		console.log(url);
         window.open(url, "_blank");
       }
     } catch (error) {
@@ -108,6 +112,7 @@ const Report = () => {
 
       if (res.status === 200) {
         const url = res.data.download_url;
+		console.log(url);
         window.open(url, "_blank");
       }
     } catch (error) {
@@ -187,7 +192,20 @@ const Report = () => {
             </Paper>
           </Stack>
         </Paper>
-        <Paper sx={{ p: 2, width: 1 }} elevation={6}></Paper>
+        <Paper
+          elevation={3}
+          sx={{
+            width: 1,
+            overflow: "hidden",
+          }}
+        >
+          <Typography variant="h5" sx={{ p: 2 }}>
+            Drone Path
+          </Typography>
+          <Box sx={{ height: "calc(100% - 48px)" }}>
+            <MapWithMarkers locations={[]}/>
+          </Box>
+        </Paper>
       </Stack>
 
       <Stack mt={5} direction="row" gap={4}>

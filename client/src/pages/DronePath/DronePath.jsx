@@ -199,7 +199,7 @@ const DronePath = () => {
       setLoading(false);
   
       if (res.status === 200) {
-        navigate("/survey-report"+id);
+        navigate("/survey-report/"+id);
       }
       } catch (error) {
       setLoading(false);

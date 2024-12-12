@@ -23,11 +23,11 @@ const navOptns = [
     navIcon: <CreditScoreIcon />,
   },
 
-  {
-    navName: 'Builder Form',
-    navPath: '/builder-form',
-    navIcon: <EditNoteIcon />,
-  },
+  // {
+  //   navName: 'Builder Form',
+  //   navPath: '/builder-form',
+  //   navIcon: <EditNoteIcon />,
+  // },
   {
     navName: 'Detect Buildings',
     navPath: '/buildings',

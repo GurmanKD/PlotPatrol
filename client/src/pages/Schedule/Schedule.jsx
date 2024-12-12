@@ -4,29 +4,46 @@ import React, { useState } from "react";
 import PinMap from "../../components/PinMap";
 import FormModal from "../../components/FormModal";
 import { Box, Typography } from "@mui/material";
+import config from "../../config";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Schedule() {
   const [modalOpen, setModalOpen] = useState(false);
   const [regionName, setRegionName] = useState("");
+  const navigate = useNavigate();
 
   const handleShowModal = (name) => {
     setRegionName(name);
     setModalOpen(true);
   };
 
+
   const handleCloseModal = () => setModalOpen(false);
 
   const handleSubmit = async (formData) => {
     try {
-      const response = await fetch("https://your-api-endpoint.com/schedule", {
-        method: "POST",
-        body: formData,
+      const data = {};
+      formData.forEach((value, key) => {
+        data[key] = value;
       });
-      if (response.ok) alert("Data submitted successfully!");
-      else alert("Submission failed.");
+      const date= data.droneDate+"T"+data.droneTime;
+      const response = await axios.post(config.api.baseUrl+'/inspection/create/', {
+        area_pincode: regionName,
+        takeoff: date,
+      });
+      if (response.status === 201) {
+        console.log("Data submitted successfully.");
+        console.log(response.data);
+        navigate('/drone-path/'+response.data.id);
+      }
+
+
     } catch (error) {
-      alert("Error submitting data.");
+      console.log("Error submitting data.");
     }
+  
+  
   };
 
   return (
