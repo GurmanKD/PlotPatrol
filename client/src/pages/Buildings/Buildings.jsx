@@ -206,37 +206,44 @@ const MapAreaLock = () => {
   };
 
   const fetchPlaces = async (bounds) => {
+    if (!map || !window.google) {
+      setError("Google Maps not initialized");
+      return;
+    }
+
     const service = new window.google.maps.places.PlacesService(map);
     const placeTypes = ["school", "hospital", "industrial"];
     const newPlaces = { schools: [], hospitals: [], industries: [] };
 
-    const searchPromises = placeTypes.map((type) => {
-      return new Promise((resolve) => {
-        service.nearbySearch(
-          {
-            bounds: bounds,
-            type: type,
-          },
-          (results, status) => {
-            if (
-              status === window.google.maps.places.PlacesServiceStatus.OK &&
-              results
-            ) {
-              const category = type + "s";
-              newPlaces[category] = results.map((place) => ({
-                name: place.name,
-                location: place.geometry.location,
-                placeData: place,
-              }));
-            }
-            resolve();
-          }
-        );
-      });
-    });
+    try {
+      await Promise.all(
+        placeTypes.map((type) =>
+          new Promise((resolve) => {
+            service.nearbySearch(
+              {
+                bounds: bounds,
+                type: type,
+              },
+              (results, status) => {
+                if (status === window.google.maps.places.PlacesServiceStatus.OK && results) {
+                  const category = type + "s";
+                  newPlaces[category] = results.map((place) => ({
+                    name: place.name,
+                    location: place.geometry.location,
+                    placeData: place,
+                  }));
+                }
+                resolve();
+              }
+            );
+          })
+        )
+      );
 
-    await Promise.all(searchPromises);
-    setPlaces(newPlaces);
+      setPlaces(newPlaces);
+    } catch (error) {
+      setError("Error fetching places: " + error.message);
+    }
   };
 
   const PlacesList = ({ title, items, icon }) => (

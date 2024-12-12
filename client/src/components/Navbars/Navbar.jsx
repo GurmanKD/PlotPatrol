@@ -13,9 +13,9 @@ const Navbar = () => {
         alignItems="center"
         justifyContent="center"
         gap={1}
-        mt={2}
+        mt={2.5}
       >
-        <Typography variant="h4" fontWeight={700} fontSize="40px">
+        <Typography variant="h4" fontWeight={700} fontSize="36px">
           Plot
         </Typography>
         <Box
@@ -24,7 +24,7 @@ const Navbar = () => {
           <Typography
             variant="h4"
             fontWeight={700}
-            fontSize="40px"
+            fontSize="36px"
             textAlign="center"
           >
             Patrol

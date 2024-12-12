@@ -9,13 +9,13 @@ const navOptns = [
   {
     navName: 'Dashboard',
     navPath: '/',
-    navIcon: <HomeIcon />,
-
+      navIcon: <PollIcon />,
+    
   },
   // {
-  //   navName: 'Home',
-  //   navPath: '/home',
-  //   navIcon: <PollIcon />,
+    //   navName: 'Home',
+    //   navPath: '/home',
+    // navIcon: <HomeIcon />,
   // },
   {
     navName: 'Complaint',

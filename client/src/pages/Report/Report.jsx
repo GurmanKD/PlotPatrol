@@ -3,6 +3,10 @@ import {
   Box,
   Button,
   CircularProgress,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  IconButton,
   Modal,
   Paper,
   Typography,
@@ -19,7 +23,7 @@ import config from "../../config";
 import MapWithMarkers from "../DronePath/DroneMap";
 import DownloadIcon from "@mui/icons-material/Download"; // Import the desired icon
 import Compare from "../SatCompare/Compare";
-import { Done } from "@mui/icons-material";
+import { Close, Done } from "@mui/icons-material";
 
 
 const modelSize = {
@@ -33,6 +37,13 @@ const Report = () => {
   const params = useParams();
   const id = params.id;
 
+
+
+
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   const fetchInitialData = async () => {
     try {
       const res = await axios.get(
@@ -41,7 +52,6 @@ const Report = () => {
 	  
       if (res.status === 200) {
         setData(res.data);
-        console.log(res.data);
       }
     } catch (error) {
       console.error(error);
@@ -165,6 +175,8 @@ const Report = () => {
   const currStage = 3;
   const [stageNum, setStageNum] = useState(currStage);
   const [mode, setMode] = React.useState(1);
+
+  console.log(stageNum);
   // 1->drone
   // 2->satellite
   // 3->Heatmap
@@ -363,7 +375,11 @@ const Report = () => {
                     }}
                     variant={mode === 3 ? "contained" : "outlined"}
                     onClick={() => {
-                      if (mode !== 3) setMode(3);
+                      if (mode !== 3){
+
+						  setMode(3);
+					 	  handleOpen();
+						}
                     }}
                   >
                     Compare Model
@@ -394,9 +410,7 @@ const Report = () => {
                 >
                   {mode === 1 && (
                     <Box>
-                      {!nodeData[stageNum - 1]?.drone_image ||
-                      Object.values(nodeData[stageNum - 1]?.drone_image).length ===
-                        0 ? (
+                      {!nodeData[stageNum - 1]?.drone_image[0]  ? (
                         <Typography textAlign="center" mt={18}>
                           No images available
                         </Typography>
@@ -449,9 +463,7 @@ const Report = () => {
 
 {mode === 2 && (
                     <Box>
-                      {!nodeData[stageNum - 1]?.satellite_image ||
-                      Object.values(nodeData[stageNum - 1]?.satellite_image).length ===
-                        0 ? (
+                      {!nodeData[stageNum - 1]?.satellite_image[0]  ? (
                         <Typography textAlign="center" mt={18}>
                           No images available
                         </Typography>
@@ -504,9 +516,7 @@ const Report = () => {
 
 				  {mode === 3 && (
 						<Box>
-						  {!nodeData[stageNum - 1]?.comparison_image ||
-						  Object.values(nodeData[stageNum - 1]?.comparison_image).length ===
-							0 ? (
+						  {!nodeData[stageNum - 1]?.comparison_image[0]  ? (
 							<Typography textAlign="center" mt={18}>
 							  No images available
 							</Typography>
@@ -558,17 +568,18 @@ const Report = () => {
 	
 				  )}
 
-                  {mode === 3 && (
-                    <Modal>
+                    {/* <Modal sx={{background:"white"}}
+					open={open}
+					onClose={handleClose}
+					>
                       <Compare node_id={id}/>
-                    </Modal>
-                  )}
+                    </Modal> */}
 
                   {mode === 4 && (
                     <Box height={1}>
                       <Model
-                        stage={stageNum - 1}
-                        size={modelSize[stageNum - 1]}
+                        stage={stageNum }
+                        size={modelSize[stageNum]}
                       />
                     </Box>
                   )}
@@ -716,6 +727,35 @@ const Report = () => {
           </Box>
         </Paper>
       </Stack>
+
+	  <Dialog
+          open={open}
+          onClose={handleClose}
+          sx={{
+            "& .MuiDialog-paper": {
+              width: "40%", // Set the dialog width to 45%
+              maxWidth: "40%",
+              height: "68vh",
+            },
+          }}
+        >
+          {" "}
+          <DialogTitle>
+            <IconButton
+              aria-label="close"
+              onClick={handleClose}
+              sx={{ position: "absolute", right: 8, top: 8, zIndex: 1000 }}
+            >
+              <Close />
+            </IconButton>
+          </DialogTitle>
+          <DialogContent sx={{ width: 1 }}>
+			  <Compare node_id={id}/>
+
+          </DialogContent>
+        </Dialog>
+
+
     </Box>
   );
 };
