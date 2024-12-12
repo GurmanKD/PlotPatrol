@@ -6,8 +6,9 @@ import {
   Stack,
   Typography,
   OutlinedInput,
+  Divider,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import dayjs from "dayjs";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import SearchIcon from "@mui/icons-material/Search";
@@ -16,27 +17,13 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import config from "../../config";
 
 const Surveys = () => {
 
-  const [initActiveSurveys, setInitActiveSurveys] = React.useState([
-    { pincode: "110019", date: "2024-05-17T10:59" },
-    { pincode: "110022", date: "2024-06-17T10:59" },
-    { pincode: "110023", date: "2024-05-17T10:59" },
-    { pincode: "110024", date: "2024-06-17T10:59" },
-    { pincode: "110019", date: "2024-05-17T10:59" },
-    { pincode: "110022", date: "2024-06-17T10:59" },
-    { pincode: "110019", date: "2024-05-17T10:59" },
-    { pincode: "110022", date: "2024-06-17T10:59" },
-    { pincode: "110019", date: "2024-05-17T10:59" },
-    { pincode: "110022", date: "2024-06-17T10:59" },
-    { pincode: "110019", date: "2024-05-17T10:59" },
-    { pincode: "110022", date: "2024-06-17T10:59" },
-  ]);
-  const [initPastSurveys, setInitPastSurveys] = React.useState([
-    { pincode: "110019", date: "2024-05-17T10:59" },
-    { pincode: "110022", date: "2024-06-17T10:59" },
-  ]);
+  const [initActiveSurveys, setInitActiveSurveys] = React.useState([]);
+  const [initPastSurveys, setInitPastSurveys] = React.useState([]);
 
   const [activeSurveys, setActiveSurveys] = React.useState(initActiveSurveys);
   const [pastSurveys, setPastSurveys] = React.useState(initPastSurveys);
@@ -73,6 +60,25 @@ const Surveys = () => {
       setPastSurveys(filteredSurveys(pastSurveys));
     }
   };
+
+  const fetchData=async()=>{
+    try {
+      const response = await axios.get(config.api.baseUrl+'/inspection/fetch-all/');
+      if (response.status === 200) {
+        setInitActiveSurveys(response.data.active);
+        setInitPastSurveys(response.data.past);
+        setActiveSurveys(response.data.active);
+        setPastSurveys(response.data.past);
+      }
+      else alert("Failed to fetch data.");
+    } catch (error) {
+      alert("Error fetching data.",error);
+    }
+  }
+
+  useEffect(()=>{
+    fetchData();
+  },[])
 
   const handleClearFilters = (str) => {
     if(str === 'active') {
@@ -180,6 +186,7 @@ const Surveys = () => {
                 </Stack>
             </Stack>
 
+
             {activeSurveys.length === 0 ? (
               <Typography variant="h5" sx={{ textAlign: "center", mt: 20 }}>
                 No results
@@ -198,8 +205,7 @@ const Surveys = () => {
                       justifyContent: "space-between",
                       borderRadius: 2,
                       gap: 1,
-                      minWidth: "27%",
-                      maxWidth: 300,
+                      minWidth: "32%",
                       maxHeight: "12vh",
                       backgroundColor: "#f9f9f9",
                       m: 1.5,
@@ -210,9 +216,9 @@ const Surveys = () => {
                     <Typography variant="h5" color="var(--primary-color)" sx={{ fontWeight: 600 }}>
                       {survey.pincode}
                     </Typography>
-                    <Stack direction="row" alignItems="center" justifyContent="space-between">
+                    <Stack direction="row" alignItems="center" justifyContent="space-between" gap={2}>
                       <Typography variant="body1">{dayjs(survey.date).format("DD MMMM YYYY")}</Typography>
-                      <IconButton variant="outlined" onClick={()=>navigate('/drone-path/'+survey.pincode)} size="small" sx={{ border: "2px solid var(--primary-color)" }} color="primary">
+                      <IconButton variant="outlined" onClick={()=>navigate('/drone-path/'+survey.id)} size="small" sx={{ border: "2px solid var(--primary-color)" }} color="primary">
                         <ArrowForwardIcon fontSize="inherit" />
                       </IconButton>
                     </Stack>
@@ -223,7 +229,6 @@ const Surveys = () => {
           </Box>
         </Paper>
 
-        {/* Past Surveys Section */}
         <Paper sx={{ p: 2, width: 1 }} elevation={10}>
           <Typography variant="h4" sx={{ p: 1 }}>
             Past Surveys
@@ -294,8 +299,7 @@ const Surveys = () => {
                       justifyContent: "space-between",
                       borderRadius: 2,
                       gap: 1,
-                      minWidth: "27%",
-                      maxWidth: 300,
+                      minWidth: "32%",
                       maxHeight: "12vh",
                       backgroundColor: "#f9f9f9",
                       m: 1.5,
@@ -306,9 +310,9 @@ const Surveys = () => {
                     <Typography variant="h5" color="var(--primary-color)" sx={{ fontWeight: 600 }}>
                       {survey.pincode}
                     </Typography>
-                    <Stack direction="row" alignItems="center" justifyContent="space-between">
+                    <Stack direction="row" alignItems="center" justifyContent="space-between" gap={2}>
                       <Typography variant="body1">{dayjs(survey.date).format("DD MMMM YYYY")}</Typography>
-                      <IconButton variant="outlined" onClick={()=>navigate('/drone-path/'+survey.pincode)}  size="small" sx={{ border: "2px solid var(--primary-color)" }} color="primary">
+                      <IconButton variant="outlined" onClick={()=>navigate('/drone-path/'+survey.id)}  size="small" sx={{ border: "2px solid var(--primary-color)" }} color="primary">
                         <ArrowForwardIcon fontSize="inherit" />
                       </IconButton>
                     </Stack>

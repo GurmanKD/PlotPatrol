@@ -17,7 +17,8 @@ import { useParams } from "react-router-dom";
 
 const DronePath = () => {
   const params=useParams();
-  const pincode=params.id;
+  const id=params.id;
+  const [pincode,setPincode]=useState("");
   const [mode, setMode] = useState(1);
   // 1--> Buildings (Registered by builders)
   // 2--> Complaints
@@ -83,7 +84,7 @@ const DronePath = () => {
     try {
       const res = await axios.post(config.api.baseUrl + "/inspection/fetch-building-complaints/", {
         "area_pincode": pincode,
-        "inspection_id": '3P3TORMAUO8O'
+        "inspection_id": id
       });
 
       if (res.status === 200) {
@@ -101,21 +102,32 @@ const DronePath = () => {
     }
   };
 
+  const fetchPincode= async()=>{
+    try {
+      const res = await axios.get(config.api.baseUrl + "/inspection/fetch/"+id);
+
+      if (res.status === 200) {
+        setPincode(res.data.area_pincode);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+
   useEffect(() => {
+    fetchPincode();
     fetchInitialData();
     fetchPlaces();
   }, []);
 
-  const handleRemove = (index) => {
-    setNodeList(nodeList.filter((_, i) => i !== index));
-  };
 
   const handleAddNode = async (data) => {
     try {
       const res = await axios.post(config.api.baseUrl + "/inspection/add-node/", {
         data: data,
         "area_pincode": pincode,
-        "inspection_id": '3P3TORMAUO8O'
+        "inspection_id": id
       });
 
       if (res.status === 200) {
@@ -131,7 +143,7 @@ const DronePath = () => {
     try {
       const res = await axios.post(config.api.baseUrl + "/inspection/remove-node/", {
         node_id: id,
-        inspection_id: '3P3TORMAUO8O'
+        inspection_id: id
       });
 
       if (res.status === 200) {
@@ -246,12 +258,19 @@ const DronePath = () => {
             </Stack>
           </Stack>
           <Stack sx={{ border: "2px solid var(--primary-color)", py: 1 }}>
+            {data[mode].length === 0 ?(
+              <Typography variant="h6" textAlign="center" color="var(--primary-color)" my={19.5} >
+                No data available
+              </Typography>
+            ):(
             <Stack
               alignItems="center"
               width={1}
               sx={{ overflowY: "auto", py: 2 }}
               height="38vh"
             >
+              
+
               {data[mode].map((item, index) => (
                 <Stack
                   direction="row"
@@ -267,9 +286,10 @@ const DronePath = () => {
                   }}
                   alignItems="flex-end"
                   justifyContent="space-between"
+                  gap={2}
                 >
                   <Box>
-                    <Typography lineHeight={1} fontSize="20px" variant="h6">
+                    <Typography lineHeight={1.3} fontSize="20px" variant="h6">
                       {item.name}
                     </Typography>
                     <Typography
@@ -298,7 +318,9 @@ const DronePath = () => {
                   </IconButton>
                 </Stack>
               ))}
+
             </Stack>
+          )}
           </Stack>
         </Paper>
 
@@ -308,6 +330,13 @@ const DronePath = () => {
           </Typography>
 
           <Stack direction="row" sx={{ border: "2px solid var(--primary-color)", p: 1, mt: 2 }}>
+
+            {nodeList.length === 0 ? (
+              <Typography variant="h6" width={1} textAlign="center" color="var(--primary-color)" my={19.5} >
+                No data available
+              </Typography>
+            ):(
+
             <Stack direction="row" sx={{ flexWrap: "wrap", height: "38vh", overflowY: "auto", alignItems: "stretch",justifyContent:"space-evenly" }}>
               {nodeList.map((node, index) => (
                 <Box
@@ -319,8 +348,7 @@ const DronePath = () => {
                     padding: 2,
                     minWidth: 200,
                     maxWidth: 300,
-                    
-                    maxHeight: "26vh",
+                    maxHeight: "23vh",
                     backgroundColor: "#f9f9f9",
                     m: 1.5
                   }}
@@ -351,6 +379,7 @@ const DronePath = () => {
                 </Box>
               ))}
             </Stack>
+          )}
           </Stack>
         </Paper>
       </Stack>
