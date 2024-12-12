@@ -103,6 +103,7 @@ const SatCompare = () => {
             color: 'primary.main',
             marginBottom: 4,
             textAlign: 'center',
+            fontWeight: 600,
           }}
         >
           Satellite Image Timeline
