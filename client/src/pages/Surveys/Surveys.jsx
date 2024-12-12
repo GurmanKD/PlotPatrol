@@ -6,7 +6,6 @@ import {
   Stack,
   Typography,
   OutlinedInput,
-  Divider,
 } from "@mui/material";
 import React, { useEffect } from "react";
 import dayjs from "dayjs";
@@ -119,12 +118,13 @@ const Surveys = () => {
 
   return (
     <Box p={2}>
-      <Typography variant="h3" sx={{ fontWeight: 600, mb: 2 }} color="primary">
-        Surveys
+      <Typography variant="h3" sx={{ fontWeight: 600, mb: 4}} color="primary">
+        Dashboard
       </Typography>
 
       <Stack direction="row" gap={5} alignItems="stretch">
         <Paper sx={{ p: 2, width: 1,minHeight:"65vh" }} elevation={10}>
+          <Stack direction="row" gap={2} alignItems="center" justifyContent="space-between">
           <Typography variant="h4" sx={{ p: 1 }}>
             Active Surveys
           </Typography>
@@ -137,6 +137,7 @@ const Surveys = () => {
           >
             Create Survey
           </Button>
+          </Stack>
 
           <Box mt={2}>
             <Stack direction="row" gap={2} mb={2} alignItems="center" justifyContent="space-around">

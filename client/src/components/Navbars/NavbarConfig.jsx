@@ -1,16 +1,21 @@
 import HomeIcon from '@mui/icons-material/Home';
 import AddCardIcon from '@mui/icons-material/AddCard';
 import CreditScoreIcon from '@mui/icons-material/CreditScore';
-import EditNoteIcon from '@mui/icons-material/EditNote';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import CompareIcon from '@mui/icons-material/Compare';
 import PollIcon from '@mui/icons-material/Poll';
 
 const navOptns = [
   {
-    navName: 'Home',
+    navName: 'Dashboard',
     navPath: '/',
     navIcon: <HomeIcon />,
+
+  },
+  {
+    navName: 'Home',
+    navPath: '/home',
+    navIcon: <PollIcon />,
   },
   {
     navName: 'Complaint',
@@ -38,11 +43,7 @@ const navOptns = [
   //   navPath: '/drone-path',
   //   navIcon: <HomeIcon />,
   // },
-  {
-    navName: 'Surveys',
-    navPath: '/survey',
-    navIcon: <PollIcon />,
-  },
+  
   {
     navName: 'Satellite Analysis',
     navPath: '/sat-compare',

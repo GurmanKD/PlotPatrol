@@ -88,8 +88,10 @@ function App() {
         <CssBaseline />
         <BrowserRouter>
           <Routes>
+          <Route path="/" element={<Protected element={<Dashboard element={<Surveys />} />} />}></Route>
+
             <Route
-              path='/'
+              path='/home'
               element={<Protected element={<Dashboard element={<Home />} />} />}
             ></Route>
             
@@ -103,7 +105,6 @@ function App() {
             <Route path="/buildings" element={<Protected element={<Dashboard element={<Buildings />} />} />}></Route>
             <Route path="/sat-compare" element={<Protected element={<Dashboard element={<SatCompare />} />} />}></Route>
             <Route path="/drone-path/:id" element={<Protected element={<Dashboard element={<DronePath />} />} />}></Route>
-            <Route path="/survey" element={<Protected element={<Dashboard element={<Surveys />} />} />}></Route>
             <Route path="/survey-report/:id" element={<Protected element={<Dashboard element={<Report />} />} />}></Route>
             <Route path="/test" element={<Protected element={<Dashboard element={<GoogleMapInput />} />} />}></Route>
           </Routes>

@@ -9,8 +9,8 @@ const Dashboard = (props) => {
       <Navbar />
 
       <Box width={1} sx={{ position:"relative", overflowY: "auto" }}>
-		<MainNav />
-        <Box  mt={5} p={3} >
+		{/* <MainNav /> */}
+        <Box  mt={0} px={3} py={1.6}>
           {props.element}
         </Box>
       </Box>

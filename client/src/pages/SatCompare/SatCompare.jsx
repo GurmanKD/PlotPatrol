@@ -186,7 +186,7 @@ const SatCompare = () => {
       <Box sx={{ padding: 2, borderRadius: 2 }}>
         <Typography
           variant='h3'
-          sx={{ fontWeight: 600, mb: 2 }}
+          sx={{ fontWeight: 600, mb: 6}}
           color='primary'
         >
           Flags from Complaints
@@ -303,7 +303,7 @@ const SatCompare = () => {
       <Box sx={{ padding: 2, borderRadius: 2 }}>
         <Typography
           variant='h3'
-          sx={{ fontWeight: 600, mb: 2 }}
+          sx={{ fontWeight: 600, mb: 6}}
           color='primary'
         >
           Buildings Under Construction

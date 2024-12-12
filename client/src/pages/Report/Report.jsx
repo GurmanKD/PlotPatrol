@@ -140,9 +140,9 @@ const Report = () => {
 
   return (
     <Box p={2}>
-      <Typography variant="h3" sx={{ fontWeight: 600, mb: 2 }} color="primary">
+      <Typography variant="h3" sx={{ fontWeight: 600, mb: 4}} color="primary">
         Survey Report{" "}
-        <span style={{ color: "black", fontWeight: 500, fontSize: "36px" }}>
+        <span style={{ color: "black", fontWeight: 500, fontSize: "32px" }}>
           {" "}
           - {data.area_pincode} | {dayjs(data.date).format("DD MMMM YYYY")}
         </span>
@@ -185,7 +185,7 @@ const Report = () => {
               <Typography variant="h6">Buildings</Typography>
             </Paper>
             <Paper elevation={10} sx={{ width: 1, p: 2 }}>
-              <Typography variant="h2" color="var(--primary-color)">
+              <Typography variant="h4" color="var(--primary-color)">
                 {data.complaints}
               </Typography>
               <Typography variant="h6">Complaints</Typography>
@@ -202,9 +202,7 @@ const Report = () => {
           <Typography variant="h5" sx={{ p: 2 }}>
             Drone Path
           </Typography>
-          <Box sx={{ height: "calc(100% - 48px)" }}>
-            <MapWithMarkers locations={[]}/>
-          </Box>
+          
         </Paper>
       </Stack>
 
@@ -279,7 +277,7 @@ const Report = () => {
             <Box>
               <Typography
                 variant="h5"
-                sx={{ mb: 2, fontWeight: 600 }}
+                sx={{ mb: 2, fontWeight: 500,fontSize: "32px" }}
                 color={nodeData[0]?.active ? "success" : "error"}
               >
                 {nodeData[0]?.active ? "Active" : "InActive"}
@@ -309,7 +307,7 @@ const Report = () => {
                         if (i + 1 !== stageNum) setStageNum(i + 1);
                       }}
                     >
-                      {i + 1}
+                      {i + 1} {(nodeData[0]?.active && i===0) && "(Current)"}
                     </Button>
                   );
                 })}
@@ -356,7 +354,7 @@ const Report = () => {
                   >
                     Satellite
                   </Button>
-                  {/* <Button
+                  <Button
                     sx={{
                       width: 0.9,
                       height: 1,
@@ -371,8 +369,8 @@ const Report = () => {
                       if (mode !== 3) setMode(3);
                     }}
                   >
-                    HeatMap
-                  </Button> */}
+                    Compare Model
+                  </Button>
                   <Button
                     sx={{
                       width: 0.9,

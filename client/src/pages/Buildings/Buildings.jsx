@@ -312,7 +312,7 @@ const MapAreaLock = () => {
           Building Detection
         </Typography>
 
-        <Box mb={2}>
+        <Box mb={4}>
           <Button
             variant="contained"
             color="primary"

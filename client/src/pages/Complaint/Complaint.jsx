@@ -87,7 +87,7 @@ export default function Complaint() {
   return (
 	<Box sx={{ padding: 2, borderRadius: 2  }}>
     
-    <Typography variant="h3" sx={{ fontWeight: 600, mb: 2 }} color='primary'>
+    <Typography variant="h3" sx={{ fontWeight: 600, mb: 4}} color='primary'>
       Register Complaint
     </Typography>
     
