@@ -82,7 +82,7 @@ const SatCompare = () => {
   const handleCloseImageDialog = () => {
     setSelectedImage(null);
   };
-
+  
   return (
     <>
       <Box
